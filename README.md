@@ -26,6 +26,36 @@ The package supplies documents, not the Android app, backend or test runners.
 Keep the existing practice project and the repair runtime/hooks installed in
 Module 3. Do not run the test commands from this document-only repository.
 
+## Test coverage at the start of Module 4
+
+Completing the assigned work in Modules 1–3 leaves 14 application scenarios:
+seven mobile tests and seven API tests. The table counts test methods, not
+classes or repeated executions.
+
+| Course step | Added test | Mobile total | API total |
+|---|---|---|---|
+| Module 1 starter | Six supplied mobile tests and four supplied API tests | 6 | 4 |
+| [2.4: mobile generation](https://app.notion.com/p/3906ed1efc9380beae43c0278cadde32) | Student-generated MOB-1006 | 7 | 4 |
+| [2.5: API generation](https://app.notion.com/p/3926ed1efc938026af99d0498ac3c73b) | Student-generated API-2004 | 7 | 5 |
+| [3.3–3.6: guided repair](https://app.notion.com/p/3906ed1efc9380cba40ee9a50f574c00) | Supplied `PreparedApiFailureTest`, API-2006; repaired and retained | 7 | 6 |
+| [3.8: independent repair](https://app.notion.com/p/3906ed1efc9380fbb5d6fe5c9e7f4aa1) | Supplied `RideConflictTest`, API-2008; repaired and retained | 7 | 7 |
+
+Locator migration changes existing tests. Review exercises, readiness
+assessment and repeated repair runs do not add scenarios. In particular,
+assessing API-2007 in Lesson 3.5 does not implement it. Lesson 3.6 explicitly
+requires retaining and committing the repaired API-2006 test; follow that
+current assignment where the earlier Python package README says to remove it.
+
+If you also applied the Module 3 [failure-digest hotfix](https://github.com/nebius-academy-templates/qa-template-week-3-python/blob/daf8642c091e29bb6b83dab04d8103e633340af8/hotfixes/README.md),
+it adds eight formatter unit tests under the separate `failureDigestTest`
+task. Count those framework checks separately from the 14 application scenarios.
+
+The included `baseline_report.md` is a completed example of the **Lesson 1.9
+starter baseline**, with ten tests. It is not a run of the 14-test suite after
+Module 3. Keep your own later results when installing these examples; use a
+fresh run of your current checkout to record its current results. The counts
+above describe required coverage, not a claim that those tests have passed.
+
 ## Completed examples
 
 These files fill the original coursework formats. Source-based examples refer

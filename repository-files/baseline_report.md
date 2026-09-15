@@ -2,9 +2,14 @@
 
 Date: 2026-09-15. Run timestamps below use UTC+02:00.
 
+Course stage: Lesson 1.9 starter baseline (six mobile and four API tests).
+
 This completed example records the original starter suites at the revision
 below. The API suite passed; the final mobile run had one execution failure.
 It does not establish the state of a student's checkout after later modules.
+After the assigned work in Modules 2–3, the expected suite contains seven
+mobile and seven API tests. Those additional tests were not part of this run.
+Keep any later baseline you recorded from your own checkout.
 
 ## Environment
 
