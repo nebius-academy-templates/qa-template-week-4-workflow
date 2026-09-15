@@ -93,9 +93,15 @@ FLAVOR=redesign ./scripts/run-suite.sh
 ```
 
 The script records combined stdout and stderr in the repository-root
-`suite-run.log` on both macOS and Linux. The current bash runner has no class
-filter; when one generated test is the acceptance target, confirm that its
-JUnit result is present instead of requiring a fixed total for the suite.
+`suite-run.log` on both macOS and Linux. It forwards extra arguments to the
+Gradle test task. To run one class:
+
+```bash
+./scripts/run-suite.sh --tests tests.CompletedRideHistoryTest
+```
+
+Confirm that the selected target's fresh JUnit result is present; a successful
+command or an unrelated passing test does not verify the target.
 
 PowerShell on Windows: use the native runner. It performs the same checks and
 report generation. If more than one emulator is connected, pass the target

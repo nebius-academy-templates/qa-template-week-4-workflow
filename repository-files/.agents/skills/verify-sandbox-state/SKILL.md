@@ -87,7 +87,7 @@ section.
 | `backend_error` | the backend fails: every data call returns HTTP 500, an `ApiException` | error state instead of data: `rides_error` on the map with a Retry button, `orders_error` in history, `geo_error` in onboarding |
 | `car_unavailable` | the Minivan tariff is unavailable for this region or route and remains visible but grayed out | the Minivan row `ride_option_3` is present but disabled (`enabled=false`); Yellow and Turquoise remain selectable |
 | `driver_not_found` | tariff search succeeds but the order cannot match a driver | ordering ends with `No cars found for this route`, no active ride is created, and the tariff list is shown again |
-| `intermittent_backend_delay` | intermittent backend degradation: roughly half of the calls get a large latency spike | real flakiness: a timeout failure roughly every other run, not on every run |
+| `intermittent_backend_delay` | intermittent backend degradation: roughly half of the calls get a large latency spike | observe latency for individual data requests or UI transitions; a fast response does not rule out the state, and the proportion of failing suite runs is not fixed |
 | `region_unavailable` | the current city is not supported by the service | `region_banner` appears with the text "Service is not available in this region yet" |
 
 Ways to confirm the effect, bash shown; on Windows use `& $adb ...` instead
