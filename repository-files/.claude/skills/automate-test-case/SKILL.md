@@ -1,6 +1,6 @@
 ---
 name: automate-test-case
-description: Coordinate readiness, generation and execution for one supplied API or mobile test case, then check the resulting test against the case. Retain its requirements and evidence across operations. Use for an end-to-end case workflow; use the individual instructions for assessment-only, generation-only or repair-only requests.
+description: Assess whether one supplied API or mobile test case can be automated, coordinate generation and execution, then check the resulting test against the case. Retain its requirements and evidence across operations. Use for an end-to-end case workflow; use the individual instructions for assessment-only, generation-only or repair-only requests.
 ---
 
 # Automate one test case
@@ -25,12 +25,12 @@ replacement for the repair queue or a persisted execution engine.
 If an instruction or required source is missing, report the dependency rather
 than silently substituting another tool.
 
-## 1. Assess the case from sources
+## 1. Assess automation feasibility
 
 Follow `agent_docs/task-automation-readiness-instructions.md`, or the supplied
 alternative, including its source-only scope and status definitions. Recheck
 the decisive sources of any supplied earlier assessment. Write the selected-case
-report to the requested readiness path or
+report to the requested assessment path or
 `.agent-state/automate-test-case/<case-id>/readiness.md`, separately from the
 workflow output; preserve any broader report. Only after assessment finishes,
 record its outcome and continue:
@@ -45,7 +45,7 @@ record its outcome and continue:
 
 Follow `.agents/skills/gen-api-test/SKILL.md` for API or
 `.agents/skills/gen-mobile-test/SKILL.md` for mobile, passing the original case
-and selected readiness report. Use the current session or an optional subagent
+and selected automation assessment. Use the current session or an optional subagent
 when supported.
 
 The selected skill owns coverage preflight, plan creation/validation, generation

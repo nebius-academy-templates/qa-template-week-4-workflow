@@ -19,7 +19,7 @@ vocabulary: `ConditionConfig`, `ConditionReceiver`, the `--es condition`
 extra and the `condition_switch_*` testTags. Those are plumbing names; the
 states themselves are product states.
 
-> **Course trap:** `adb ... am broadcast` always returns `result=0`, even
+> `adb ... am broadcast` always returns `result=0`, even
 > when the state did NOT apply. "The command ran" is not the same as "the
 > state took effect". Always confirm the **user-visible behavior** in the
 > app.

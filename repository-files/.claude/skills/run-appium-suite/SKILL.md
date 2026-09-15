@@ -16,8 +16,7 @@ macOS/Linux. Do not reproduce the run sequence by hand unless diagnosing a
 script failure.
 
 This skill always targets one emulator. If several devices are connected,
-select one serial explicitly. Multi-device execution is outside the agent and
-student workflow.
+select one serial explicitly. This workflow does not support multi-device execution.
 
 > Proof that "the change works" is the output of a
 > local run on the emulator.
@@ -35,14 +34,13 @@ ARM hosts.
 uiautomator2 driver 3.9.8. Run `npm ci` once in the repo root and start Appium
 only through the OS-specific `scripts/start-appium` launcher. It selects the
 npm-pinned driver instead of another project's registry.
-This course deliberately stays
-on Appium 2.16.2; do not accept an audit fix that upgrades the server or driver
+This project pins Appium 2.16.2; do not accept an audit fix that upgrades the server or driver
 across a major version.
 
 PowerShell on Windows:
 
 ```powershell
-# 1. Create or validate the CPU-compatible 2 GB course AVD and start it visibly
+# 1. Create or validate the CPU-compatible 2 GB AVD and start it visibly
 .\scripts\setup-emulator.ps1
 
 # 2. Verify the complete local environment
