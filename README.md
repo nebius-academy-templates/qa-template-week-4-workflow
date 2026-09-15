@@ -13,26 +13,41 @@ This package uses its [document layout at `6977a01`](https://github.com/ai-qa-la
 
 1. Download this repository using **Code → Download ZIP** and open
    `repository-files/`.
-2. Copy its contents into your practice repository, preserving the directory
-   structure and merging the hidden `.agents/` and `.claude/` directories.
-   Replace the six named skills, `scripts/sync_agent_skills.py` and
-   `.agents/hooks/test_repair.py` with this package's versions. Compare any
-   personal edits before replacing those files.
-3. Keep the existing `.claude/settings.json` and `.codex/hooks.json` from Module 3.
-   They must invoke `.agents/hooks/test_repair.py` with the appropriate adapter.
-   The package includes the runtime required by its repair skill; copying a
-   `SKILL.md` alone does not install a hook.
-4. From the **practice repository root**, synchronize and check the Claude copies:
+2. Copy the contents of `repository-files/` into your practice repository,
+   preserving the directory structure, including hidden directories. Compare
+   personal edits before replacing
+   the six named skills, `scripts/sync_agent_skills.py` and
+   `.agents/hooks/test_repair.py` with this package's versions.
+3. Use the instructions in `.agents/skills/` with your coding agent. Claude Code
+   and Codex are not required to use the skill files.
 
-   ```shell
-   python scripts/sync_agent_skills.py
-   python scripts/sync_agent_skills.py --check
-   ```
+The repair runtime requires Python 3.11 or newer. If you use Claude Code or
+Codex, preserve the corresponding Module 3 hook configuration:
+`.claude/settings.json` for Claude Code or `.codex/hooks.json` for Codex. It must
+invoke `.agents/hooks/test_repair.py` with the appropriate adapter. Hook setup
+depends on the coding agent; copying a `SKILL.md` alone does not install a hook.
 
-   Use `python3` on macOS/Linux. The repair runtime requires Python 3.11 or newer.
+### Optional: Claude Code copies
 
-`.agents/skills/` is canonical. The script synchronizes all six `SKILL.md` files;
-edit those originals and regenerate their `.claude/skills/` copies. The optional
+The package already includes `.claude/skills/` copies synchronized with the
+canonical files in `.agents/skills/`. No synchronization command is needed
+after copying the package unchanged.
+
+If you later edit a canonical skill, regenerate its Claude copy from the
+**practice repository root**:
+
+```shell
+python scripts/sync_agent_skills.py
+```
+
+To check whether the copies match without changing them:
+
+```shell
+python scripts/sync_agent_skills.py --check
+```
+
+Use `python3` on macOS/Linux. Skip this section if you do not use Claude Code.
+The script synchronizes all six `SKILL.md` files. The optional
 `agents/openai.yaml` files remain with the canonical skills.
 
 ## Included skills
