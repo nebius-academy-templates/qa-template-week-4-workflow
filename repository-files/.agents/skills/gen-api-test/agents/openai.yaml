@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate API Test"
+  short_description: "Plan and generate one verified REST API test"
+  default_prompt: "Use $gen-api-test to check coverage, create or validate agent_docs/automation-plans/<case-id>.md, and generate one API test from the supplied Test Case."

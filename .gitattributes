@@ -1,4 +1,2 @@
-# Preserve the original bytes of the distributed course files on every OS.
-repository-files/** -text
-evidence/** -text
-README.md text eol=lf
+# Keep scripts and matching skill copies consistent across platforms.
+* text=auto eol=lf

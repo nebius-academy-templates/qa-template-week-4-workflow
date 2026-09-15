@@ -6,9 +6,9 @@
 ## Status
 
 - Test Case: `<TEST_CASE_ID>` — `<title>`
-- Artifact status: `complete`
-- Automated validation: recorded outside this file by the lesson checker.
-- Generation gate: use this plan only after automated validation passes.
+- Artifact status: `validated`
+- Validation: `<current Test Case and repository sources checked by gen-mobile-test>`
+- Generation gate: generate test code only after every plan claim is validated.
 
 ## Test contract
 
@@ -48,7 +48,7 @@ use screen coordinates as locators or interaction targets.
 |---|---|
 | `<exact Appium test-layer path>` | `<required change>` |
 
-Any additional file requires a revised plan and another automated validation pass.
+Any additional file requires a revised and revalidated plan.
 
 ## Risks and stop conditions
 

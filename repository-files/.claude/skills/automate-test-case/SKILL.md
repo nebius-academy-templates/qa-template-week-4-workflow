@@ -12,14 +12,14 @@ record or execution evidence the user provides. Preserve the case ID, layer,
 preconditions and every expected result. Resolve multiple cases or missing case
 details before implementation; do not create a backlog or invent a new case.
 
-Follow repository rules, `AI_POLICY.md` and the current execution and repair
+Follow repository rules, `agent_docs/AI_POLICY.md` and the current execution and repair
 permissions. Each operation's instructions remain authoritative for its scope.
 This skill does not authorize a push, external write, new framework or product change.
 Use the case and its contract for expected behavior, not observed product output.
 
 Update the requested workflow output for this invocation as operations finish,
-using the fields in `Workflow result` below. Default to `qa-workflow.md`; if it belongs to another
-case, preserve it and use `qa-workflow.<case-id>.md`. Preserve an earlier record's
+using the fields in `Workflow result` below. Default to `agent_docs/qa-workflow.md`; if it belongs to another
+case, preserve it and use `agent_docs/qa-workflow.<case-id>.md`. Preserve an earlier record's
 original case and useful sections; it is context, not execution proof or a
 replacement for the repair queue or a persisted execution engine.
 If an instruction or required source is missing, report the dependency rather
@@ -48,22 +48,16 @@ Follow `.agents/skills/gen-api-test/SKILL.md` for API or
 and selected readiness report. Use the current session or an optional subagent
 when supported.
 
-The selected skill owns coverage preflight, generation and execution. The
-unchanged Module 2 skills require a plan accepted by the lesson's automated
-validator after their coverage preflight confirms a gap. Pass the plan and its
-actual validation result when available. A completed example or source review
-does not establish that the validator accepted it. If the required plan or
-validation result is missing, report that dependency and stop implementation;
-planning and validation remain the separate task defined by those skills.
-Load the selected skill's requested context. Do not immediately repeat a
-successful run or load unrelated layer documentation.
+The selected skill owns coverage preflight, plan creation/validation, generation
+and execution. Load its requested context; do not add another planning stage,
+immediately repeat a successful run, or load unrelated layer documentation.
 
 | Generation outcome | Coordinator action |
 |---|---|
 | Equivalent existing coverage | Retain the target and coverage comparison; establish execution evidence in step 3. Apply step 4's conditions for another case check. No duplicate test or new plan. |
 | Occupied ID without equivalent behavior | Record the conflicting target and unmet expected result. Stop; do not rename the case or claim coverage. |
 | New test with a valid passing result | Continue to step 4 with the plan, changes and matching evidence. |
-| Missing, unvalidated, unsupported or contradictory plan | Preserve the missing validation or specific conflict and stop implementation; do not report the example as accepted. |
+| Unsupported or contradictory plan | Preserve the specific conflict and stop implementation. |
 | Failed or unverified execution | Preserve the actual failing target or missing evidence; use the failure route below. |
 
 ## 3. Establish the execution result

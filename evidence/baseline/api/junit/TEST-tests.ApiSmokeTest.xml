@@ -1,4 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<testsuite name="tests.ApiSmokeTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-15T16:30:38.594Z" time="1.945">
-  <testcase name="Valid phone and OTP issue a token that opens the data endpoints" classname="tests.ApiSmokeTest" time="1.904" />
-</testsuite>

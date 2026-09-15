@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<testsuite name="tests.RideAndHistoryE2ETest" tests="1" skipped="0" failures="1" errors="0" timestamp="2026-09-15T16:34:42.007Z" time="25.366">
-  <testcase name="Search a ride then check order history" classname="tests.RideAndHistoryE2ETest" time="25.365">
-    <failure message="org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of element located by AppiumBy.id: map_from_field (tried for 20 second(s) with 500 milliseconds interval)" type="org.openqa.selenium.TimeoutException">org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of element located by AppiumBy.id: map_from_field (tried for 20 second(s) with 500 milliseconds interval)</failure>
-  </testcase>
-</testsuite>

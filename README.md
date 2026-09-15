@@ -1,125 +1,124 @@
-# Module 4 workflow documents
+# Module 4 QA workflow skills
 
-This package brings together the documents used throughout the AI for QA
-course. It contains unchanged instructions supplied in Modules 1–3, completed
-examples of the documents learners wrote, and the coordinating skill for
-Lesson 4.1. The files inside `repository-files/` use their installation paths
-in the Kotlin practice repository.
+Install this package into the Kotlin practice repository after Module 3. It
+provides six skills for assessing a case, planning and generating its test,
+executing it, repairing a supported test defect, and checking the result against
+the original case.
 
-## Use the package
+The [completed practice repository](https://github.com/ai-qa-lab/AI-for-Kotlin-practice)
+contains the application, tests, documents, case workbooks and installed hooks.
+This package uses its [document layout at `6977a01`](https://github.com/ai-qa-lab/AI-for-Kotlin-practice/tree/6977a018a9b94b5c803ce7b1173f50e65b088b42/agent_docs).
 
-1. Continue in your Kotlin practice repository after Module 3. Download this
-   repository using **Code → Download ZIP**, then open `repository-files/`.
-2. Copy its contents into the practice repository, retaining the directory
-   structure, including the hidden `.agents/` and `.claude/` directories. Compare files you
-   already edited before replacing them. Keep project-specific policy and
-   source corrections that still apply to your checkout.
-3. The package includes matching `.claude/skills/` copies of all six skills.
-   Keep `.agents/skills/` as the canonical source. The original practice
-   sync script covers only the two starter skills, so it is not an installer
-   for the additional generation, repair or coordinating skills.
-4. Read the example's source revision and case before using it. Verify the
-   cited paths, symbols and commands against your current checkout. Reports
-   describe their recorded runs; copying one does not execute your tests.
+## Install
 
-The package supplies documents, not the Android app, backend or test runners.
-Keep the existing practice project and the repair runtime/hooks installed in
-Module 3. Do not run the test commands from this document-only repository.
+1. Download this repository using **Code → Download ZIP** and open
+   `repository-files/`.
+2. Copy its contents into your practice repository, preserving the directory
+   structure and merging the hidden `.agents/` and `.claude/` directories.
+   Replace the six named skills, `scripts/sync_agent_skills.py` and
+   `.agents/hooks/test_repair.py` with this package's versions. Compare any
+   personal edits before replacing those files.
+3. Keep the existing `.claude/settings.json` and `.codex/hooks.json` from Module 3.
+   They must invoke `.agents/hooks/test_repair.py` with the appropriate adapter.
+   The package includes the runtime required by its repair skill; copying a
+   `SKILL.md` alone does not install a hook.
+4. From the **practice repository root**, synchronize and check the Claude copies:
 
-## Test coverage at the start of Module 4
+   ```shell
+   python scripts/sync_agent_skills.py
+   python scripts/sync_agent_skills.py --check
+   ```
 
-Completing the assigned work in Modules 1–3 leaves 14 application scenarios:
-seven mobile tests and seven API tests. The table counts test methods, not
-classes or repeated executions.
+   Use `python3` on macOS/Linux. The repair runtime requires Python 3.11 or newer.
 
-| Course step | Added test | Mobile total | API total |
-|---|---|---|---|
-| Module 1 starter | Six supplied mobile tests and four supplied API tests | 6 | 4 |
-| [2.4: mobile generation](https://app.notion.com/p/3906ed1efc9380beae43c0278cadde32) | Student-generated MOB-1006 | 7 | 4 |
-| [2.5: API generation](https://app.notion.com/p/3926ed1efc938026af99d0498ac3c73b) | Student-generated API-2004 | 7 | 5 |
-| [3.3–3.6: guided repair](https://app.notion.com/p/3906ed1efc9380cba40ee9a50f574c00) | Supplied `PreparedApiFailureTest`, API-2006; repaired and retained | 7 | 6 |
-| [3.8: independent repair](https://app.notion.com/p/3906ed1efc9380fbb5d6fe5c9e7f4aa1) | Supplied `RideConflictTest`, API-2008; repaired and retained | 7 | 7 |
+`.agents/skills/` is canonical. The script synchronizes all six `SKILL.md` files;
+edit those originals and regenerate their `.claude/skills/` copies. The optional
+`agents/openai.yaml` files remain with the canonical skills.
 
-Locator migration changes existing tests. Review exercises, readiness
-assessment and repeated repair runs do not add scenarios. In particular,
-assessing API-2007 in Lesson 3.5 does not implement it. Lesson 3.6 explicitly
-requires retaining and committing the repaired API-2006 test; follow that
-current assignment where the earlier Python package README says to remove it.
+## Included skills
 
-If you also applied the Module 3 [failure-digest hotfix](https://github.com/nebius-academy-templates/qa-template-week-3-python/blob/daf8642c091e29bb6b83dab04d8103e633340af8/hotfixes/README.md),
-it adds eight formatter unit tests under the separate `failureDigestTest`
-task. Count those framework checks separately from the 14 application scenarios.
-
-The included `baseline_report.md` is a completed example of the **Lesson 1.9
-starter baseline**, with ten tests. It is not a run of the 14-test suite after
-Module 3. Keep your own later results when installing these examples; use a
-fresh run of your current checkout to record its current results. The counts
-above describe required coverage, not a claim that those tests have passed.
-
-## Completed examples
-
-These files fill the original coursework formats. Source-based examples refer
-to [AI-for-Kotlin-practice at `cadca2fb`](https://github.com/nebius-academy-templates/AI-for-Kotlin-practice/tree/cadca2fb442682e0eda7df9a7199cf5ddfcf1beb).
-The baseline identifies its executed source state and supporting reports.
-Its recorded API run passed 4 of 4 tests; the final mobile run passed 5 of 6,
-with one UiAutomator2 instrumentation failure. The report retains that failure
-and the earlier emulator issue as observed results.
-
-| File in `repository-files/` | Earlier lesson | Use in the workflow |
-|---|---|---|
-| [environment_notes.md](repository-files/environment_notes.md) | 1.3 | Recorded toolchain, emulator and build configuration |
-| [agent_docs/building_the_project.md](repository-files/agent_docs/building_the_project.md) | 1.8 | Build, API/mobile execution and result locations |
-| [agent_docs/test_architecture.md](repository-files/agent_docs/test_architecture.md) | 1.8 | Mobile test layers, synchronization and failure artifacts |
-| [agent_docs/page_object_model.md](repository-files/agent_docs/page_object_model.md) | 1.8 | Pages, actions, locators and assertions |
-| [baseline_report.md](repository-files/baseline_report.md) | 1.9 | An earlier suite result available for comparison |
-| [AI_POLICY.md](repository-files/AI_POLICY.md) | 1.11 | Allowed changes, restrictions and evidence requirements |
-| [automation_plan.md](repository-files/automation_plan.md) | 2.3 format | Filled API-2007 implementation plan |
-| [task-automation-readiness.md](repository-files/task-automation-readiness.md) | 3.5 format | Source-based API-2007 readiness assessment |
-
-The API-2007 examples use the complete case in the unchanged
-[test-cases.xlsx](repository-files/test-cases.xlsx) workbook: `Case Summary`
-and `Steps`. The plan describes proposed test code; it is not a
-claim that the test has been generated or executed.
-
-## Supplied files kept unchanged
-
-The following files are copied byte for byte from the linked source revisions.
-Completed `agent_docs/`, policy and report examples above are authored examples,
-not unchanged copies of the original blank exercise scaffolds.
-
-| Source revision | Files included under `repository-files/` |
+| Skill | Responsibility |
 |---|---|
-| [Practice repository — `cadca2fb`](https://github.com/nebius-academy-templates/AI-for-Kotlin-practice/tree/cadca2fb442682e0eda7df9a7199cf5ddfcf1beb) | `AGENTS.md`, `CLAUDE.md`, `api-tests/README.md`, `appium-tests/README.md`, `AI_POLICY.md.template`, `baseline_report.md.template`, `.agents/skills/run-appium-suite/SKILL.md`, `.agents/skills/verify-sandbox-state/SKILL.md` |
-| [Module 2 generation package — `22369580`](https://github.com/nebius-academy-templates/week-2-qa-kotlin-course-template/tree/223695806342b0b9e53b315ae8c120e5d27875bf) | `.agents/skills/gen-api-test/SKILL.md`, `.agents/skills/gen-mobile-test/SKILL.md`, `automation_plan.api.md.template`, `automation_plan.mobile.md.template` |
-| [Module 2 review package — `d2343d39`](https://github.com/nebius-academy-templates/qa-foundation-agentic-template/tree/d2343d39a79160d32afa4a9df15ec7de5319ff27) | `review_template.md` |
-| [Module 3 readiness package — `c2853522`](https://github.com/nebius-academy-templates/qa-template-week-3-agents/tree/c2853522386b627fadd2916164d25243f95ddcb9) | `test-cases.xlsx`; original root `task-automation-readiness-instructions.md` stored at `agent_docs/task-automation-readiness-instructions.md` |
-| [Module 3 repair package — `daf8642c`](https://github.com/nebius-academy-templates/qa-template-week-3-python/tree/daf8642c091e29bb6b83dab04d8103e633340af8) | `.agents/skills/test-repair/SKILL.md` |
+| [automate-test-case](repository-files/.agents/skills/automate-test-case/SKILL.md) | Route one case through readiness, generation/execution, applicable repair and a final case-conformance check. |
+| [gen-api-test](repository-files/.agents/skills/gen-api-test/SKILL.md) | Check coverage, create or validate the case's plan, generate one API test and run the API suite. |
+| [gen-mobile-test](repository-files/.agents/skills/gen-mobile-test/SKILL.md) | Check coverage, create or validate the case's plan, generate one Appium test and delegate execution. |
+| [run-appium-suite](repository-files/.agents/skills/run-appium-suite/SKILL.md) | Use the existing OS-specific runner and inspect actual execution results. |
+| [verify-sandbox-state](repository-files/.agents/skills/verify-sandbox-state/SKILL.md) | Enable and verify a requested sandbox state when the case requires it. |
+| [test-repair](repository-files/.agents/skills/test-repair/SKILL.md) | Diagnose one exact failing test and make an evidence-backed test-layer correction within the existing repair budgets. |
 
-Only the location of the readiness instructions changes; their text remains
-unchanged. Invoke them using their installed path under `agent_docs/`.
-The five supplied canonical skills also have byte-identical copies under
-`.claude/skills/`; the Module 4 coordinator has its own matching copy there.
-The original policy and baseline templates are retained beside their completed
-examples. Root READMEs from different source packages are linked above rather
-than copied over one another.
+## Automation plans in Modules 2 and 4
 
-## Workflow handoff
+The [Module 2 package](https://github.com/nebius-academy-templates/week-2-qa-kotlin-course-template)
+keeps the lesson versions: students prepare a plan and submit it to the lesson
+checker before generation. This Module 4 package installs the working versions,
+which create and validate the plan against the case, contract and repository
+sources as part of generation. This validation does not claim LMS acceptance.
 
-The [coordinating skill](repository-files/.agents/skills/automate-test-case/SKILL.md)
-selects readiness, generation/execution and the final case check. An API case
-uses the API generation instructions and relevant project documents. A mobile
-case additionally uses the mobile architecture, page/action conventions,
-mobile plan and execution procedure. Sandbox-state instructions apply when
-the case requires that state. The final Strands review uses `review_template.md`.
+A new case gets its own plan, for example
+`agent_docs/automation-plans/API-2007.md`. Earlier plans such as `API-2004.md` and
+`MOB-1006.md`, and the earlier `agent_docs/automation_plan.md`, remain available.
+The generator checks existing coverage before creating a plan or test.
 
-The unchanged Module 2 generation skills require an `automation_plan.md` whose
-automated validation has passed. They stop if that evidence is absent or the
-plan belongs to another case. The filled example demonstrates the plan's
-content; this package does not claim that the lesson checker accepted it.
-Supply the actual validation result before asking those skills to generate.
-The Module 4 coordinating skill in this package respects that handoff and
-reports missing plan validation without changing the original generation skills.
+The two Module 4 templates have separate installation paths:
 
-Preserve the broader readiness report when producing a new selected-case
-assessment. The coordinating skill creates its current assessment and workflow
-record during the invocation; no pre-filled `qa-workflow.md` is supplied.
+- [agent_docs/templates/automation_plan.api.workflow.md.template](repository-files/agent_docs/templates/automation_plan.api.workflow.md.template)
+- [agent_docs/templates/automation_plan.mobile.workflow.md.template](repository-files/agent_docs/templates/automation_plan.mobile.workflow.md.template)
+
+The original Module 2 templates keep their names and content. Each installed
+generator points to the workflow template for its layer.
+
+## Project documents used by the workflow
+
+Verify these files in the practice repository before starting. Paths below are
+relative to that repository's root; they are dependencies, not files to read
+from this package checkout.
+
+| Operation | Documents and inputs |
+|---|---|
+| Repository rules | `AGENTS.md`, `agent_docs/AI_POLICY.md` |
+| Readiness | `agent_docs/task-automation-readiness-instructions.md`, the complete supplied case and relevant product/test sources |
+| API planning and generation | `agent_docs/templates/automation_plan.api.workflow.md.template`, `agent_docs/building_the_project.md`, `api-tests/README.md`, `fake-api/openapi.yaml` and the relevant test-layer sources |
+| Mobile planning and generation | `agent_docs/templates/automation_plan.mobile.workflow.md.template`, `agent_docs/building_the_project.md`, `agent_docs/test_architecture.md`, `agent_docs/page_object_model.md`, `appium-tests/README.md`, `agent_docs/baseline_report.md` when present, and the relevant test-layer sources |
+| Execution and repair | Existing runners, `.agents/hooks/test_repair.py`, installed hook configuration and matching JUnit/Allure evidence |
+| Final case check | Original case, final test and affected helpers, the case's plan when present, and matching execution evidence |
+
+`agent_docs/environment_notes.md` and the earlier
+`agent_docs/task-automation-readiness.md` remain useful context. They do not
+replace current environment checks or the selected case's current assessment.
+`agent_docs/review_template.md` belongs to the supplied GitHub PR reviewer;
+the coordinator's final case check follows the original test case.
+
+## Run one case
+
+Use the full case from `test-cases/test-cases.xlsx`, including its preconditions,
+actions and expected results. From your practice project, ask the agent:
+
+```text
+Automate API-2007 from test-cases/test-cases.xlsx using .agents/skills/automate-test-case/SKILL.md.
+```
+
+The coordinator writes the selected readiness assessment to
+`.agent-state/automate-test-case/API-2007/readiness.md`. When new coverage is
+needed, the API generator writes
+`agent_docs/automation-plans/API-2007.md` before changing test code. The workflow
+record goes to `agent_docs/qa-workflow.md`, or a case-specific filename when an
+existing record belongs to another case.
+
+The result records what ran, what evidence was reused, which case requirements
+were checked and what remains unresolved. Missing prerequisites, ambiguous
+requirements or a product defect can stop implementation. Completed source
+files alone do not prove a passing run.
+
+## Source and verification scope
+
+The five operation skills, two workflow templates and repair runtime reuse the
+[course source at `0fff3358`](https://github.com/nebius-academy-templates/ai-for-qa-kotlin/tree/0fff33586426ccc0f1fa1f1fdd14fe6dcc3ebfac).
+The coordinator reuses the existing Module 4 skill. Document paths are adapted
+for `agent_docs/`, plans use case-specific files, and coverage commands are
+explicit for the practice checkout. The Appium version error retains the
+wording checked by the existing repair tests. The synchronization script includes the
+coordinator alongside the five operation skills.
+
+This package provides agent instructions and their dependencies. It does not
+include a Strands graph or execute a case when installed. Validate a workflow
+run through its fresh test results and recorded evidence in the practice project.

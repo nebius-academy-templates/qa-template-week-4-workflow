@@ -1,5 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<testsuite name="tests.PasskeyPromoTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-15T16:36:54.790Z" time="18.303">
-  <testcase name="Skip on the passkey promo continues to location onboarding" classname="tests.PasskeyPromoTest" time="8.75" />
-  <testcase name="Create a passkey continues to location onboarding" classname="tests.PasskeyPromoTest" time="9.547" />
-</testsuite>

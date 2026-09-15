@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<testsuite name="tests.OnboardingSmokeTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-09-15T16:36:25.916Z" time="28.87">
-  <testcase name="Ride options show prices after search" classname="tests.OnboardingSmokeTest" time="12.347" />
-  <testcase name="Full onboarding opens the map" classname="tests.OnboardingSmokeTest" time="9.48" />
-  <testcase name="Wrong OTP shows an error" classname="tests.OnboardingSmokeTest" time="6.963" />
-</testsuite>

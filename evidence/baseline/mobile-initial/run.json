@@ -1,9 +1,0 @@
-{
-  "FinishedAt": "2026-09-15T18:35:09.2622776+02:00",
-  "StartedAt": "2026-09-15T18:32:55.1042200+02:00",
-  "ExitCode": 1,
-  "Command": ".\\scripts\\run-suite.ps1 -Flavor stable -Device emulator-5554",
-  "Device": "emulator-5554",
-  "Variant": "stable",
-  "Revision": "cadca2fb442682e0eda7df9a7199cf5ddfcf1beb"
-}

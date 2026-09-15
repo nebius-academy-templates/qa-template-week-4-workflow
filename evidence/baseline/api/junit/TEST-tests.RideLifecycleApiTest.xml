@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<testsuite name="tests.RideLifecycleApiTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-09-15T16:30:40.572Z" time="5.71">
-  <testcase name="A completed ride becomes the newest order" classname="tests.RideLifecycleApiTest" time="1.918" />
-  <testcase name="driver_not_found rejects an order without changing history" classname="tests.RideLifecycleApiTest" time="1.904" />
-  <testcase name="A cancelled ride is not added to order history" classname="tests.RideLifecycleApiTest" time="1.88" />
-</testsuite>
