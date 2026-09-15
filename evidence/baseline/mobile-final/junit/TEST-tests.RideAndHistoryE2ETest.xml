@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="tests.RideAndHistoryE2ETest" tests="1" skipped="0" failures="1" errors="0" timestamp="2026-09-15T16:37:13.097Z" time="7.401">
+  <testcase name="Search a ride then check order history" classname="tests.RideAndHistoryE2ETest" time="7.398">
+    <failure message="org.openqa.selenium.WebDriverException: An unknown server-side error occurred while processing the command. Original error: 'POST /element' cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed). Check the server log and/or the logcat output for more details" type="org.openqa.selenium.WebDriverException">org.openqa.selenium.WebDriverException: An unknown server-side error occurred while processing the command. Original error: 'POST /element' cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed). Check the server log and/or the logcat output for more details</failure>
+  </testcase>
+</testsuite>

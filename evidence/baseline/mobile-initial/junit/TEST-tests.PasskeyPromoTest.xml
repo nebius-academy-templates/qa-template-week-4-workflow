@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="tests.PasskeyPromoTest" tests="2" skipped="0" failures="2" errors="0" timestamp="2026-09-15T16:34:10.553Z" time="31.45">
+  <testcase name="Skip on the passkey promo continues to location onboarding" classname="tests.PasskeyPromoTest" time="16.675">
+    <failure message="org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of element located by AppiumBy.id: phone_title (tried for 10 second(s) with 500 milliseconds interval)" type="org.openqa.selenium.TimeoutException">org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of element located by AppiumBy.id: phone_title (tried for 10 second(s) with 500 milliseconds interval)</failure>
+  </testcase>
+  <testcase name="Create a passkey continues to location onboarding" classname="tests.PasskeyPromoTest" time="14.765">
+    <failure message="org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of element located by AppiumBy.id: phone_title (tried for 10 second(s) with 500 milliseconds interval)" type="org.openqa.selenium.TimeoutException">org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of element located by AppiumBy.id: phone_title (tried for 10 second(s) with 500 milliseconds interval)</failure>
+  </testcase>
+</testsuite>

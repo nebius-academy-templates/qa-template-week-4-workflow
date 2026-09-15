@@ -1,0 +1,4 @@
+# Preserve the original bytes of the distributed course files on every OS.
+repository-files/** -text
+evidence/** -text
+README.md text eol=lf

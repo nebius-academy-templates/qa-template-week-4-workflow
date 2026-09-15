@@ -1,0 +1,7 @@
+{
+  "FinishedAt": "2026-09-15T18:30:46.4799137+02:00",
+  "Revision": "cadca2fb442682e0eda7df9a7199cf5ddfcf1beb",
+  "StartedAt": "2026-09-15T18:30:28.2958417+02:00",
+  "Command": ".\\gradlew.bat :api-tests:test --rerun --console=plain",
+  "ExitCode": 0
+}

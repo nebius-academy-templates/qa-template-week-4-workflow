@@ -1,0 +1,18 @@
+RecordedAt=2026-09-15T18:35:50.7952933+02:00
+Command: adb -s emulator-5554 shell svc bluetooth disable
+BluetoothShellCommand: Exec disable
+disable: Success
+Command: adb -s emulator-5554 shell am force-stop com.google.android.bluetooth
+Check: bluetooth_on
+0
+Check: focused window
+
+  mCurrentFocus=Window{58883f1 u0 Application Error: com.google.android.bluetooth}
+  mFocusedApp=ActivityRecord{24506228 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t6}
+
+Command: adb -s emulator-5554 shell input keyevent KEYCODE_BACK
+
+  mCurrentFocus=Window{f0df7d u0 com.google.android.apps.nexuslauncher/com.google.android.apps.nexuslauncher.NexusLauncherActivity}
+  mFocusedApp=ActivityRecord{24506228 u0 com.google.android.apps.nexuslauncher/.NexusLauncherActivity t6}
+
+0
