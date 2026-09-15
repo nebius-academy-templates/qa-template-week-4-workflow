@@ -66,7 +66,7 @@ from this package checkout.
 | Operation | Documents and inputs |
 |---|---|
 | Repository rules | `AGENTS.md`, `agent_docs/AI_POLICY.md` |
-| Automation feasibility | `agent_docs/task-automation-readiness-instructions.md`, the complete supplied case and relevant product/test sources |
+| Can this test case be automated? | `agent_docs/task-automation-readiness-instructions.md`, the complete supplied case and relevant product/test sources |
 | API planning and generation | `agent_docs/templates/automation_plan.api.workflow.md.template`, `agent_docs/building_the_project.md`, `api-tests/README.md`, `fake-api/openapi.yaml` and the relevant test-layer sources |
 | Mobile planning and generation | `agent_docs/templates/automation_plan.mobile.workflow.md.template`, `agent_docs/building_the_project.md`, `agent_docs/test_architecture.md`, `agent_docs/page_object_model.md`, `appium-tests/README.md`, `agent_docs/baseline_report.md` when present, and the relevant test-layer sources |
 | Execution and repair | Existing runners, `.agents/hooks/test_repair.py`, installed hook configuration and matching JUnit/Allure evidence |

@@ -25,7 +25,7 @@ replacement for the repair queue or a persisted execution engine.
 If an instruction or required source is missing, report the dependency rather
 than silently substituting another tool.
 
-## 1. Assess automation feasibility
+## 1. Can this test case be automated?
 
 Follow `agent_docs/task-automation-readiness-instructions.md`, or the supplied
 alternative, including its source-only scope and status definitions. Recheck
