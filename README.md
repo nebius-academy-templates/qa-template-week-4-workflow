@@ -1,9 +1,9 @@
 # QA workflow skills
 
 Install this package into your Kotlin project repository. It
-provides six skills for assessing a case, planning and generating its test,
-executing it, repairing a supported test defect, and checking the result against
-the original case.
+provides the complete 18-case workbook and six skills for assessing a case,
+planning and generating its test, executing it, repairing a supported test
+defect, and checking the result against the original case.
 
 ## Install
 
@@ -12,7 +12,7 @@ the original case.
 2. Copy the contents of `repository-files/` into your project repository,
    preserving the directory structure, including hidden directories. Compare
    personal edits before replacing
-   the six named skills, `scripts/sync_agent_skills.py` and
+   the six named skills, `scripts/sync_agent_skills.py`, `test-cases/test-cases.xlsx` and
    `.agents/hooks/test_repair.py` with this package's versions.
 3. Use the instructions in `.agents/skills/` with your coding agent. Claude Code
    and Codex are not required to use the skill files.
@@ -22,6 +22,19 @@ Codex, preserve the corresponding existing hook configuration:
 `.claude/settings.json` for Claude Code or `.codex/hooks.json` for Codex. It must
 invoke `.agents/hooks/test_repair.py` with the appropriate adapter. Hook setup
 depends on the coding agent; copying a `SKILL.md` alone does not install a hook.
+
+### Read the Excel workbook
+
+Install `openpyxl` in the Python environment used by your coding agent. Activate
+your virtual environment first if you use one, then install and verify:
+
+```shell
+python -m pip install openpyxl
+python -c "import openpyxl; print(openpyxl.__version__)"
+```
+
+Use `python3` instead of `python` if that is your Python command. Run the agent's
+workbook-reading commands with the same interpreter.
 
 ### Optional: Claude Code copies
 
@@ -57,6 +70,36 @@ The script synchronizes all six `SKILL.md` files. The optional
 | [verify-sandbox-state](repository-files/.agents/skills/verify-sandbox-state/SKILL.md) | Enable and verify a requested sandbox state when the case requires it. |
 | [test-repair](repository-files/.agents/skills/test-repair/SKILL.md) | Diagnose one exact failing test and make an evidence-backed test-layer correction within the existing repair budgets. |
 
+## Included test cases
+
+[test-cases.xlsx](repository-files/test-cases/test-cases.xlsx) contains all 18
+cases from the [Module 3 workbook](https://github.com/nebius-academy-templates/qa-template-week-3-agents/blob/main/test-cases.xlsx):
+10 mobile and 8 API cases. Match `Case Summary` and `Steps` by `Case ID` to read
+the complete preconditions, actions and expected results. `Endpoints` is a
+column in `Case Summary`.
+
+The `Module 3 Readiness` and `Readiness Notes` columns carry forward the results
+for the five cases assessed in Lesson 3.5:
+
+| Case | Module 3 readiness |
+|---|---|
+| MOB-1007 | `READY` |
+| MOB-1010 | `NEEDS_CLARIFICATION` |
+| MOB-1014 | `BLOCKED` |
+| API-2005 | `BLOCKED` |
+| API-2007 | `READY` |
+
+Blank readiness cells identify cases outside that lesson's assessment.
+`Automated Test` is separate: it contains 13 expected test-source references
+after Modules 1-3 and retains `TODO` for these five cases. Verify references in
+your own checkout, where generated class or method names may differ. Neither a
+reference nor `READY` proves that a test has passed.
+
+The readiness values describe the Module 3 assessment. Preserve your completed
+report with its evidence; the coordinator rechecks the selected case against
+current sources before implementation. The Week 4 workbook does not change the
+original Module 3 assignment.
+
 ## Project documents used by the workflow
 
 Verify these files in the project repository before starting. Paths below are
@@ -80,8 +123,8 @@ the coordinator's final case check follows the original test case.
 
 ## Run one case
 
-Use the full case from `test-cases/test-cases.xlsx`, including its preconditions,
-actions and expected results. From your project, ask the agent:
+Use the full case from the packaged `test-cases/test-cases.xlsx`, including its
+preconditions, actions and expected results. From your project, ask the agent:
 
 ```text
 Automate API-2007 from test-cases/test-cases.xlsx using .agents/skills/automate-test-case/SKILL.md.
