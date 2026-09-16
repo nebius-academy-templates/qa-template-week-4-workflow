@@ -31,13 +31,16 @@ context:
 1. Search current API coverage with
    `rg -n '@DisplayName|@AllureId' api-tests/src/test/kotlin/tests`; there is no registry file.
 2. Compare the Test Case behavior and expected result with current tests.
-3. If current coverage already proves the behavior, or the assigned
-   `@AllureId` is occupied, stop. Cite the existing file, class and test method,
-   state that no duplicate will be generated and report that no files changed.
+3. If current coverage already proves the complete Test Case behavior, stop.
+   Cite the existing file, class and test method, retain the coverage
+   comparison, and report that no files changed.
+4. If the assigned `@AllureId` is occupied but the existing test does not prove
+   equivalent behavior, stop. Report the conflicting target and the unmet Test
+   Case behavior. Do not generate a duplicate, remap the ID or claim coverage.
 
-A duplicate-coverage stop does not require an automation plan. When the
-preflight confirms a coverage gap, create or validate the plan before editing
-test code.
+Neither stop requires an automation plan. Only equivalent existing behavior is
+coverage. When the preflight confirms a coverage gap and the assigned ID is
+available, create or validate the plan before editing test code.
 
 ## Plan creation and validation
 

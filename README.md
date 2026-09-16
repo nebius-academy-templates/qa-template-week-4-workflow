@@ -108,19 +108,21 @@ replace current environment checks or the selected case's current assessment.
 `agent_docs/review_template.md` belongs to the supplied GitHub PR reviewer;
 the coordinator's final case check follows the original test case.
 
-## Run one case
+## Optional direct use
 
-Use the full case from the packaged `test-cases/test-cases.xlsx`, including its
-preconditions, actions and expected results. From your project, ask the agent:
+Installing the package does not require running a case. Use the coordinating
+skill when a lesson or task asks you to automate a named case. Supply the full
+case from the packaged `test-cases/test-cases.xlsx`, including its
+preconditions, actions and expected results:
 
 ```text
-Automate API-2007 from test-cases/test-cases.xlsx using .agents/skills/automate-test-case/SKILL.md.
+Automate <case-id> from test-cases/test-cases.xlsx using .agents/skills/automate-test-case/SKILL.md.
 ```
 
 The coordinator writes the case automation assessment to
-`.agent-state/automate-test-case/API-2007/readiness.md`. When new coverage is
-needed, the API generator writes
-`agent_docs/automation-plans/API-2007.md` before changing test code. The workflow
+`.agent-state/automate-test-case/<case-id>/readiness.md`. When new coverage is
+needed, the selected generator writes
+`agent_docs/automation-plans/<case-id>.md` before changing test code. The workflow
 record goes to `agent_docs/qa-workflow.md`, or a case-specific filename when an
 existing record belongs to another case.
 
