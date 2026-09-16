@@ -78,27 +78,14 @@ cases from the [Module 3 workbook](https://github.com/nebius-academy-templates/q
 the complete preconditions, actions and expected results. `Endpoints` is a
 column in `Case Summary`.
 
-The `Module 3 Readiness` and `Readiness Notes` columns carry forward the results
-for the five cases assessed in Lesson 3.5:
-
-| Case | Module 3 readiness |
-|---|---|
-| MOB-1007 | `READY` |
-| MOB-1010 | `NEEDS_CLARIFICATION` |
-| MOB-1014 | `BLOCKED` |
-| API-2005 | `BLOCKED` |
-| API-2007 | `READY` |
-
-Blank readiness cells identify cases outside that lesson's assessment.
-`Automated Test` is separate: it contains 13 expected test-source references
-after Modules 1-3 and retains `TODO` for these five cases. Verify references in
-your own checkout, where generated class or method names may differ. Neither a
-reference nor `READY` proves that a test has passed.
-
-The readiness values describe the Module 3 assessment. Preserve your completed
-report with its evidence; the coordinator rechecks the selected case against
-current sources before implementation. The Week 4 workbook does not change the
-original Module 3 assignment.
+The `Automated Test` column contains 13 expected test-source references after
+Modules 1-3. The other five cases have a status of `READY FOR AUTOMATION`,
+`BLOCKED` or `NEEDS_CLARIFICATION`, based on the Lesson 3.5 assessment.
+`READY FOR AUTOMATION` is the workbook label for the assessment result `READY`.
+Verify test references in your own checkout, where generated class or method
+names may differ. Neither a source reference nor a readiness status proves a
+passing run. Preserve your completed assessment report with its evidence;
+the coordinator rechecks the selected case against current sources.
 
 ## Project documents used by the workflow
 
