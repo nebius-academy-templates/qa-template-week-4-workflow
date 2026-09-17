@@ -31,33 +31,42 @@ read-only with respect to repository source may perform this section and pass
 its result to generation. Reuse that handoff only when it identifies the same
 Test Case, working revision and relevant local changes and contains the
 comparison required below. A `GAP` handoff must also confirm that the assigned
-ID is available. An equivalent-coverage handoff must name the exact target and
-include matching exact-target execution evidence before it can report
-`ALREADY_COVERED`. If the handoff is missing, inconsistent or stale, repeat
-this same preflight rather than introducing a second set of coverage rules.
+ID is available. An equivalent-coverage handoff must name the exact target that
+carries the assigned ID and include matching exact-target execution evidence
+before it can report `ALREADY_COVERED`. If the handoff is missing,
+inconsistent or stale, repeat this same preflight rather than introducing a
+second set of coverage rules.
 
 To perform the preflight:
 
 1. Search current API coverage with
    `rg -n '@DisplayName|@AllureId' api-tests/src/test/kotlin/tests`; there is no registry file.
-2. Compare the Test Case behavior and expected result with current tests.
-3. If current coverage already proves the complete Test Case behavior, cite the
-   existing file, class and test method and retain the coverage comparison.
-   Reuse matching exact-target evidence or run that one target as specified in
-   `Verification and result`. Report `ALREADY_COVERED` only after fresh or
-   reused evidence proves that exact target passed. If execution is unavailable
-   or the target fails, retain the comparison but report the actual unverified
-   or failed result instead of claiming completed coverage.
-4. If the assigned `@AllureId` is occupied but the existing test does not prove
-   equivalent behavior, stop. Report the conflicting target and the unmet Test
-   Case behavior. Do not generate a duplicate, remap the ID or claim coverage.
+2. Find the test target that carries the Test Case's assigned `@AllureId`.
+   Coverage of the selected Test Case is keyed by this ID, not only by similar
+   behavior.
+3. If no target carries the assigned ID, report `GAP` and confirm that the ID is
+   available. A test under another Allure ID may be cited as an implementation
+   reference, but it does not cover the selected Test Case and must not block
+   generation.
+4. If a target carries the assigned ID, compare its complete behavior and
+   expected result with the Test Case. When they are equivalent, cite the file,
+   class and test method and retain the coverage comparison. Reuse matching
+   exact-target evidence or run that one target as specified in `Verification
+   and result`. Report `ALREADY_COVERED` only after fresh or reused evidence
+   proves that exact target passed. If execution is unavailable or the target
+   fails, retain the comparison but report the actual unverified or failed
+   result instead of claiming completed coverage.
+5. If the assigned ID is occupied by a target that does not prove equivalent
+   behavior, report `BLOCKED`, the conflicting target and the unmet Test Case
+   behavior. Do not generate a duplicate, remap the ID or claim coverage.
 
 Neither an equivalent-coverage result nor an occupied-ID conflict requires an
-automation plan. Only equivalent existing behavior with matching exact-target
-execution evidence can produce `ALREADY_COVERED`. When the preflight confirms
-a coverage gap and the assigned ID is available, create or validate the plan
-before editing test code. A generation operation that receives a current `GAP`
-handoff begins here and does not repeat the coverage search.
+automation plan. Only equivalent existing behavior under the assigned ID with
+matching exact-target execution evidence can produce `ALREADY_COVERED`. When
+the preflight confirms a coverage gap and the assigned ID is available, create
+or validate the plan before editing test code. A generation operation that
+receives a current `GAP` handoff begins here and does not repeat the coverage
+search.
 
 ## Plan creation and validation
 
@@ -136,8 +145,9 @@ test.
 
 1. Start `fake-api` with the setup documented in `api-tests/README.md` and
    `agent_docs/building_the_project.md`.
-2. Run only the generated or equivalent existing test's exact
-   `package.Class.method` with the API test task, `--tests
+2. Run only the exact `package.Class.method` for the generated test or for an
+   equivalent existing test under the selected assigned ID, using the API test
+   task, `--tests
    package.Class.method` and `--rerun` (or `--rerun-tasks`). Do not run the
    whole API suite as verification for this one-case workflow.
 3. Require fresh JUnit XML containing exactly one matching, passing,
@@ -147,7 +157,7 @@ test.
    response.
 
 On success, report the Test Case ID, exact target, changed files, assertions,
-command and observed result. For unchanged equivalent coverage, also report
-the retained coverage comparison and that no files changed. On failure, report
-the smallest relevant evidence and stop. Test repair and backend modification
-require separate authorization.
+command and observed result. For unchanged equivalent coverage under the
+assigned ID, also report the retained coverage comparison and that no files
+changed. On failure, report the smallest relevant evidence and stop. Test
+repair and backend modification require separate authorization.

@@ -79,8 +79,9 @@ documentation.
 
 | Coverage or generation outcome | Coordinator action |
 |---|---|
-| Equivalent existing coverage | Retain the target and coverage comparison; establish execution evidence in step 3. Apply step 4's conditions for another case check. No duplicate test or new plan. |
-| Occupied ID without equivalent behavior | Record the conflicting target and unmet expected result. Stop; do not rename the case or claim coverage. |
+| Assigned ID available, including similar behavior only under another ID | Retain `GAP` and continue generation for the selected Test Case. A different-ID test is an implementation reference, not coverage. |
+| Equivalent existing coverage under the assigned ID | Retain the target and coverage comparison; establish exact-target execution evidence in step 3. Apply step 4's conditions for another case check. No duplicate test or new plan. |
+| Assigned ID occupied without equivalent behavior | Record `BLOCKED`, the conflicting target and unmet expected result. Stop; do not rename the case or claim coverage. |
 | New test with a valid passing result | Continue to step 4 with the plan, changes and matching evidence. |
 | Unsupported or contradictory plan | Preserve the specific conflict and stop implementation. |
 | Failed or unverified execution | Preserve the actual failing target or missing evidence; use the failure route below. |
