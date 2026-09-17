@@ -1,186 +1,137 @@
 ---
 name: automate-test-case
-description: Assess whether one supplied API or mobile test case can be automated, coordinate generation and execution, then check the resulting test against the case. Retain its requirements and evidence across operations. Use for an end-to-end case workflow; use the individual instructions for assessment-only, generation-only or repair-only requests.
+description: Automate one supplied API or mobile test case end to end - establish its readiness status, delegate generation to gen-api-test or gen-mobile-test, establish an exact-target execution result, and check the resulting test against the case. Use for the full case workflow; use the readiness instructions, a generation skill or test-repair directly for a single operation.
 ---
 
 # Automate one test case
 
 ## Inputs and scope
 
-Use one complete supplied case, the current repository, and any earlier workflow
-record or execution evidence the user provides. Preserve the case ID, layer,
-preconditions and every expected result. Resolve multiple cases or missing case
-details before implementation; do not create a backlog or invent a new case.
-
-Follow repository rules, `agent_docs/AI_POLICY.md` and the current execution and repair
-permissions. Each operation's instructions remain authoritative for its scope.
-This skill does not authorize a push, external write, new framework or product change.
-Use the case and its contract for expected behavior, not observed product output.
-
-Update the requested workflow output for this invocation as operations finish,
-using the fields in `Workflow result` below. Default to `agent_docs/qa-workflow.md`; if it belongs to another
-case, preserve it and use `agent_docs/qa-workflow.<case-id>.md`. Preserve an earlier record's
-original case and useful sections; it is context, not execution proof or a
-replacement for the repair queue or a persisted execution engine.
-If an instruction or required source is missing, report the dependency rather
-than silently substituting another tool.
-
-## 1. Select or establish the readiness status
-
-First inspect the selected case for a saved readiness status. The recognized
-values are `READY FOR AUTOMATION` (the workbook label for `READY`), `BLOCKED`
-and `NEEDS_CLARIFICATION`. Reuse a recognized status without reassessing the
-case unless the current request explicitly asks for a new assessment. Record
-the reused value, its source and any supplied assessment report in the workflow
-output. `TODO`, a blank value and a test-source reference are not readiness
-statuses and must not bypass assessment by themselves.
-
-An explicit host prepared-batch mode may replace model readiness for a
-statusless course-curated case only after deterministic validation of the
-selected workbook rows and all required non-empty fields. Record this as a
-prepared preflight, not as a new source-based readiness opinion. Never infer
-prepared-case authorization merely from `TODO`, a blank value, a source path,
-or the number of selected cases.
-
-When there is no recognized saved status or explicit prepared preflight, or
-when reassessment was explicitly requested, follow
-`agent_docs/task-automation-readiness-instructions.md`, or the supplied
-alternative, including its source-only scope and status definitions. Write the
-selected-case report to the requested assessment path or
-`.agent-state/automate-test-case/<case-id>/readiness.md`, separately from the
-workflow output; preserve any broader report. Then record the selected outcome
-and continue:
-
-| Assessment result | Next action |
+| Input | Requirement |
 |---|---|
-| `READY` | Continue to the case's generation skill. |
-| `BLOCKED` | Record the confirmed missing capability and evidence; stop implementation. |
-| `NEEDS_CLARIFICATION` | Record the question that changes the decision; stop implementation. |
+| Case | Exactly one complete case: ID, layer (API or mobile), preconditions, actions, every expected result. Several cases or missing fields: ask before implementing. |
+| Repository | The current checkout. Record the revision and uncommitted changes under the test suites before any run. |
+| Earlier record or evidence | Optional context only. It never counts as execution proof for this invocation. |
 
-## 2. Delegate generation; interpret the result
+Rules:
 
-Follow `.agents/skills/gen-api-test/SKILL.md` for API or
-`.agents/skills/gen-mobile-test/SKILL.md` for mobile, passing the original case
-and selected automation assessment. Use the current session or an optional subagent
-when supported.
+- Follow `AGENTS.md`, `agent_docs/AI_POLICY.md` and the execution and repair
+  permissions in effect.
+- Expected behavior comes from the case and the contract
+  (`fake-api/openapi.yaml`), not from observed product output.
+- This skill authorizes no push, product change, new framework or additional
+  test case.
+- Each delegated skill owns its own procedure and evidence rules. This skill
+  routes between them and records their outcomes.
+- If a referenced instruction file is missing, stop and report it.
 
-The selected skill owns test identification, plan creation or validation,
-generation and execution. For API automation, retain the assigned case even
-when a test under another ID implements similar behavior. Reuse its assigned-ID
-test and complete missing requirements. Coverage assessment is a separate
-request; do not insert a coverage stage into this automation workflow.
-For mobile, follow the generation skill's existing preflight procedure.
-Load the requested context; do not add another planning stage, immediately
-repeat a successful run, or load unrelated layer documentation.
+Outputs: the readiness report at
+`.agent-state/automate-test-case/<case-id>/readiness.md` (step 1) and the
+workflow record at `agent_docs/qa-workflow.md`, or
+`agent_docs/qa-workflow.<case-id>.md` when the default file already holds
+another case (see Workflow record). Update the record after each step.
 
-| Generation outcome | Coordinator action |
+## 1. Establish the readiness status
+
+1. Read the case's saved status. Recognized values: `READY` (workbook label
+   `READY FOR AUTOMATION`), `BLOCKED`, `NEEDS_CLARIFICATION`. Any other value
+   (`TODO`, blank, a test path) means no status.
+2. With a recognized status and no request to reassess: record the value and
+   its source and skip the assessment.
+3. Otherwise assess the case with
+   `agent_docs/task-automation-readiness-instructions.md` and write the report
+   to `readiness.md`.
+
+| Status | Next |
 |---|---|
-| API case has no assigned-ID test | Implement the selected case. Tests under other IDs are implementation references and do not discharge the assignment. |
-| API case has one assigned-ID test with missing requirements | Complete that test's missing requirements, then execute it and continue to step 4. |
-| API case is fully implemented under its assigned ID | By default, run that exact target fresh and continue to step 4 without generating a duplicate or a new plan. |
-| `ALREADY_IMPLEMENTED` for an API case, with skipping explicitly requested | Retain the exact target and requirement-to-source mapping; finish this case without edits, execution or final review. This is a source-level implementation assessment, not a fresh passing result. |
-| API ID belongs to unrelated behavior or multiple methods | Record `BLOCKED` and the conflicting targets. Do not remap the ID or create a duplicate. |
-| Mobile generation identifies equivalent existing coverage | Retain its comparison and establish execution evidence in step 3; apply step 4's conditions for another case check. |
-| Created, completed or existing test with a valid passing result | Continue to step 4 with the plan when present, changes and matching evidence. |
-| Unsupported or contradictory plan | Preserve the specific conflict and stop implementation. |
-| Failed or unverified execution | Preserve the actual failing target or missing evidence; use the failure route below. |
+| `READY` | Step 2. |
+| `BLOCKED` | Record the missing capability and its evidence. Stop. |
+| `NEEDS_CLARIFICATION` | Record the question whose answer changes the decision. Stop. |
+
+## 2. Generate the test
+
+Invoke `gen-api-test` (API) or `gen-mobile-test` (mobile) with the original
+case and the readiness result. The generation skill owns test identification by
+assigned ID, the plan, the implementation and its own run. Do not add a
+planning or coverage stage around it.
+
+Keep the assigned case ID. A test under another ID is an implementation
+reference, not a substitute. If the user asked to skip implemented cases,
+`ALREADY_IMPLEMENTED` from `gen-api-test` ends the workflow: record the target
+and its requirement-to-source mapping, run nothing, skip step 4.
+
+| Generation result | Next |
+|---|---|
+| Test created or completed, or an existing assigned-ID test found | Step 3 with the target `Class.method`, the plan and the changed paths. |
+| `BLOCKED`: the assigned ID maps to unrelated behavior or to several methods | Record the conflicting targets. Stop; do not remap the ID or create a duplicate. |
+| Plan conflicts with the case or the contract | Record the conflict. Stop. |
 
 ## 3. Establish the execution result
 
-An explicitly requested API `ALREADY_IMPLEMENTED` skip finishes before this step.
-Record that no test ran and no final review was performed. An assigned ID alone
-does not justify skipping: generation must compare the complete case with the
-enabled test and its helpers.
+Required evidence: one fresh run of the exact target from this invocation with
+JUnit XML, the Allure result and the command log, matched to the current
+sources under the rules of `gen-api-test` (API) or `run-appium-suite` (mobile).
+If generation already ran the exact target on the final sources, reuse that
+run; do not run it twice. For mobile, an earlier matching run may be reused
+when the user does not request a new one: record its time and state that no
+test ran in this invocation.
 
-Inspect JUnit, relevant Allure steps/attachments and the command/log for the
-intended non-skipped test with its original assertions and exact target result.
-Coverage, compilation or a shell exit alone cannot establish passing execution;
-missing XML leaves it unverified.
+Without matching evidence, run the exact target:
 
-Match earlier evidence to the current target, revision and relevant local changes,
-including untracked test sources. For API evidence, require the recorded command
-to contain exactly one `--tests package.Class.method` filter for that target and
-require JUnit and Allure each to contain exactly one result matching it. A broad
-suite is mismatched even when the target, revision and sources match; a name or
-timestamp alone is also insufficient.
-For API automation without an explicit skip, require a fresh exact-target run
-from this invocation; reuse generation's result without running it twice. For
-mobile, reuse matching evidence unless a new run is requested, recording the
-original run time and explicitly stating when no test ran in this invocation.
+| Layer | Command |
+|---|---|
+| API | API test task with `--tests package.Class.method` and `--rerun`; backend per `api-tests/README.md`. |
+| Mobile | `run-appium-suite` with its test filter. |
 
-When evidence is absent or mismatched and execution is authorized, run the
-existing target without re-entering the generator. For API, follow
-`api-tests/README.md` and `agent_docs/building_the_project.md` for backend setup
-and run only the exact `package.Class.method` fresh with the API test task,
-`--tests package.Class.method` and `--rerun` (or `--rerun-tasks`). For mobile,
-use `run-appium-suite` and its supported filter. Retain the revision and
-relevant local source changes before the run to match the resulting evidence.
+| Result | Next |
+|---|---|
+| `VERIFIED`: the target passed and the evidence matches the current sources | Step 4. |
+| `FAILED`: the target failed | Failure route. |
+| `VERIFICATION_INCOMPLETE`: no run, setup failure, skipped or zero tests, evidence mismatch | Record the missing proof. Stop unless the setup problem is fixed and the run repeated. |
 
-If execution is outside scope or unavailable, record `NOT_VERIFIED` and the
-missing proof. Source conformance may still be inspected; it does not establish
-execution or readiness for integration.
-
-### Failure route
-
-Distinguish a failure of the exact target from an execution or setup failure;
-retain the target result and the evidence that supports that classification.
-
-For authorized repair of that failure, follow `.agents/skills/test-repair/SKILL.md`
-with the exact target and decisive evidence, retaining its classification and
-outcome. Use the installed queue, locks and both budgets without clearing or
-restarting them or automatically dispatching unrelated work. An incompatible lock blocks
-execution until resolved through that procedure; every repair run remains
-locked to the same exact target.
-
-After a verified correction, continue to step 4 with matching new evidence;
-earlier green evidence no longer verifies changed code.
+Failure route: with repair permission, invoke `test-repair` for the exact
+target and adopt its classification and outcome. `PRODUCT_BUG`,
+`NEEDS_INVESTIGATION`, `INFRASTRUCTURE_ISSUE` and `EXHAUSTED` end the workflow
+with that status. After a verified fix, continue to step 4 with the new
+evidence; earlier evidence no longer covers the changed code.
 
 ## 4. Check the test against the test case
 
-Check every test created or changed by this workflow, including changes to
-helpers that affect the scenario, and every API case executed by this workflow.
-An explicit `ALREADY_IMPLEMENTED` skip does not invoke this stage.
-For an unchanged existing mobile test, reuse the
-current coverage comparison. Repeat the check only when the user requests it,
-the case, relevant contract or test behavior has changed since that comparison,
-or the comparison leaves full coverage unclear.
+Inputs: the complete original case; the final test and the helpers it calls;
+the plan when one exists; the exact-target JUnit, Allure and request/response
+evidence from step 3.
 
-When a check is needed, read the original case, final test and relevant helpers,
-the plan when one exists, and matching execution evidence. Verify that the test
-prepares the required preconditions, performs the case's actions in the required order and
-asserts every expected result, including any resulting state. Check the test's
-behavior beyond changed lines. Keep this check read-only.
+Check, read-only:
 
-Before invoking a separate reviewer, the coordinator should assemble those
-inputs into one bounded review packet: the complete case, the final exact-target
-test with stable line numbers, the helper sources needed to interpret it, the
-plan when present, and matching exact-target JUnit, Allure and HTTP evidence.
-Validate the packet's target and source version against current execution
-evidence before passing it to the reviewer. Pass the packet directly instead of
-giving the reviewer general repository discovery tools or asking it to repeat
-list, search and read operations. If a required source or artifact cannot be
-included safely and completely, keep the check unverified and report the
-missing input rather than asking the model to reconstruct it.
+1. Preconditions: the test establishes every precondition of the case (reset,
+   authentication, sandbox state, prior ride).
+2. Actions: it performs the case's actions in the case's order against the same
+   operation and parameters.
+3. Expected results: it asserts every expected result, including resulting
+   state such as the active ride or order history. An assertion inside a helper
+   counts; a passing run without the assertion does not.
+4. Evidence: the run evidence belongs to this test and this source version.
 
-If corrections are authorized, stay within the original allowed test scope,
-revalidate the affected plan, verify outside this check, and check the corrected
-version. Otherwise retain the gaps as remaining work.
-Do not add unrequested repairs, additional tests or product changes.
+Report each gap as: case requirement, test or helper path and line, missing
+behavior, consequence, required change. Report anything that the inputs cannot
+establish as unverified instead of guessing. A passing run is not conformance;
+keep the two separate.
 
-## Workflow result
+Skip this step only for an unchanged mobile test whose coverage comparison from
+step 2 is complete. A correction needs authorization, stays within the test
+layers, and is followed by step 3 and this check again.
 
-Include in the workflow record and final summary:
+## Workflow record
 
-- case source, working revision and relevant local changes;
-- selected route, operations, instructions and observed outcomes;
-- target `Class.method`, plan and changed paths when applicable;
-- exact target result, evidence paths and source versions, reused versus new evidence;
-- case check performed or coverage comparison reused; supported gaps with the case
-  requirement, test location and consequence;
-- remaining work and next action, with supporting evidence.
+The workflow record and the final summary contain:
 
-Product bugs, exhausted budgets and unresolved investigations remain unresolved.
-A supported stop is a workflow result, not a completed passing test. A `skipped`
-queue outcome or passing test with missing case assertions does not establish
-successful test completion. Keep target failures, missing proof and stale
-evidence visible.
+- case ID and source; revision and uncommitted test-suite changes;
+- steps performed, instructions used, status of each;
+- target `Class.method`, plan path, changed paths;
+- execution status, evidence paths, reused or new;
+- case check result: each gap with requirement, location, consequence;
+- remaining work and next action.
+
+A stop with `BLOCKED`, `NEEDS_CLARIFICATION`, `FAILED`,
+`VERIFICATION_INCOMPLETE` or a repair stop status is a valid result. Report it
+as such, not as a completed test.
