@@ -39,8 +39,10 @@ another case (see Workflow record). Update the record after each step.
 2. With a recognized status and no request to reassess: record the value and
    its source and skip the assessment.
 3. Otherwise assess the case with
-   `agent_docs/task-automation-readiness-instructions.md` and write the report
-   to `readiness.md`.
+   `agent_docs/task-automation-readiness-instructions.md`, or the instructions
+   the request names, and write the selected-case report to `readiness.md` or
+   the path the request names. Leave an existing report that covers several
+   cases unchanged; it is context for a reused status, not this report.
 
 | Status | Next |
 |---|---|
@@ -57,7 +59,8 @@ assigned ID, the plan, the implementation and its own run.
 Keep the assigned case ID. A test under another ID is an implementation
 reference, not a substitute. If the user asked to skip implemented cases,
 `ALREADY_IMPLEMENTED` from `gen-api-test` ends the workflow: record the target
-and its requirement-to-source mapping, run nothing, skip step 4.
+and its requirement-to-source mapping, run nothing, skip step 4. It is a
+source-level result, not a passing run.
 
 | Generation result | Next |
 |---|---|
@@ -86,7 +89,7 @@ Without matching evidence, run the exact target:
 |---|---|
 | `VERIFIED`: the target passed and the evidence matches the current sources | Step 4. |
 | `FAILED`: the target failed | Failure route. |
-| `VERIFICATION_INCOMPLETE`: no run, setup failure, skipped or zero tests, evidence mismatch | Record the missing proof. Stop unless the setup problem is fixed and the run repeated. |
+| `VERIFICATION_INCOMPLETE`: no run, setup failure, skipped or zero tests, evidence mismatch | Record the missing proof. When execution is unavailable or out of scope, step 4 may still compare the sources with the case and reports a source-only check, not conformance of a verified test. |
 
 Failure route: with repair permission, invoke `test-repair` for the exact
 target and adopt its classification and outcome. `PRODUCT_BUG`,
@@ -94,11 +97,14 @@ target and adopt its classification and outcome. `PRODUCT_BUG`,
 with that status. After a verified fix, continue to step 4 with the new
 evidence; earlier evidence no longer covers the changed code.
 
+For an unchanged mobile test whose coverage comparison from step 2 is complete,
+reuse that comparison in place of step 4.
+
 ## 4. Check the test against the test case
 
 Inputs: the complete original case; the final test and the helpers it calls;
 the plan when one exists; the exact-target JUnit, Allure and request/response
-evidence from step 3.
+evidence from step 3 when a run exists.
 
 Check, read-only:
 
@@ -109,16 +115,17 @@ Check, read-only:
 3. Expected results: it asserts every expected result, including resulting
    state such as the active ride or order history. An assertion inside a helper
    counts; a passing run without the assertion does not.
-4. Evidence: the run evidence belongs to this test and this source version.
+4. Evidence: the run evidence belongs to this test and this source version;
+   without a run, mark the check source-only.
 
 Report each gap as: case requirement, test or helper path and line, missing
 behavior, consequence, required change. Report anything that the inputs cannot
 establish as unverified instead of guessing. A passing run is not conformance;
 keep the two separate.
 
-Skip this step only for an unchanged mobile test whose coverage comparison from
-step 2 is complete. A correction needs authorization, stays within the test
-layers, and is followed by step 3 and this check again.
+A correction needs authorization and stays within the test layers. After it,
+revalidate the plan when the change affects it, repeat step 3, then repeat this
+check.
 
 ## Workflow record
 
@@ -127,10 +134,12 @@ The workflow record and the final summary contain:
 - case ID and source; revision and uncommitted test-suite changes;
 - steps performed, instructions used, status of each;
 - target `Class.method`, plan path, changed paths;
-- execution status, evidence paths, reused or new;
+- execution status, evidence paths, the revision and source state they belong
+  to, reused or new;
 - case check result: each gap with requirement, location, consequence;
 - remaining work and next action.
 
 A stop with `BLOCKED`, `NEEDS_CLARIFICATION`, `FAILED`,
-`VERIFICATION_INCOMPLETE` or a repair stop status is a valid result. Report it
-as such, not as a completed test.
+`VERIFICATION_INCOMPLETE` or a repair stop status is a valid result, and
+`ALREADY_IMPLEMENTED` is a source-level result. Report them as such, not as a
+completed passing test.
