@@ -108,13 +108,16 @@ from this package checkout.
 | API planning and generation | `agent_docs/templates/automation_plan.api.workflow.md.template`, `agent_docs/building_the_project.md`, `api-tests/README.md`, `fake-api/openapi.yaml` and the relevant test-layer sources |
 | Mobile planning and generation | `agent_docs/templates/automation_plan.mobile.workflow.md.template`, `agent_docs/building_the_project.md`, `agent_docs/test_architecture.md`, `agent_docs/page_object_model.md`, `appium-tests/README.md`, `agent_docs/baseline_report.md` when present, and the relevant test-layer sources |
 | Execution and repair | Existing runners, `.agents/hooks/test_repair.py`, installed hook configuration and matching exact-target JUnit/Allure evidence |
-| Final case check | Original case, final test and affected helpers, the case's plan when present, and matching execution evidence |
+| Final case check | One host-prepared packet containing the original case, line-numbered final test and required helpers, the plan when present, and matching exact-target JUnit/Allure/HTTP evidence |
 
 `agent_docs/environment_notes.md` and the earlier
 `agent_docs/task-automation-readiness.md` remain useful context. They do not
 replace current environment checks or the selected case's current assessment.
 `agent_docs/review_template.md` belongs to the supplied GitHub PR reviewer;
 the coordinator's final case check follows the original test case.
+The coordinator validates and assembles this packet before invoking a separate
+reviewer. The reviewer receives no general repository discovery tools and does
+not repeat list, search or read operations already completed by the workflow.
 
 ## Optional direct use
 

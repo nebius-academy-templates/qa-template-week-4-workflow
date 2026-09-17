@@ -142,6 +142,17 @@ prepares the required preconditions, performs the case's actions in the required
 asserts every expected result, including any resulting state. Check the test's
 behavior beyond changed lines. Keep this check read-only.
 
+Before invoking a separate reviewer, the coordinator should assemble those
+inputs into one bounded review packet: the complete case, the final exact-target
+test with stable line numbers, the helper sources needed to interpret it, the
+plan when present, and matching exact-target JUnit, Allure and HTTP evidence.
+Validate the packet's target and source version against current execution
+evidence before passing it to the reviewer. Pass the packet directly instead of
+giving the reviewer general repository discovery tools or asking it to repeat
+list, search and read operations. If a required source or artifact cannot be
+included safely and completely, keep the check unverified and report the
+missing input rather than asking the model to reconstruct it.
+
 If corrections are authorized, stay within the original allowed test scope,
 revalidate the affected plan, verify outside this check, and check the corrected
 version. Otherwise retain the gaps as remaining work.
