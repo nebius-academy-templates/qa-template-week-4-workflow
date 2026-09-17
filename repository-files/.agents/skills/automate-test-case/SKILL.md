@@ -57,36 +57,40 @@ and continue:
 | `BLOCKED` | Record the confirmed missing capability and evidence; stop implementation. |
 | `NEEDS_CLARIFICATION` | Record the question that changes the decision; stop implementation. |
 
-## 2. Delegate coverage and generation; interpret the result
+## 2. Delegate generation; interpret the result
 
 Follow `.agents/skills/gen-api-test/SKILL.md` for API or
 `.agents/skills/gen-mobile-test/SKILL.md` for mobile, passing the original case
 and selected automation assessment. Use the current session or an optional subagent
 when supported.
 
-The selected skill owns the coverage-preflight rules, plan
-creation/validation, generation and execution. A coordinator may run that
-skill's Coverage preflight as a separate operation that is read-only with
-respect to repository source before invoking a write-capable generation
-operation. Pass its complete result forward; do not create independent
-deduplication criteria. When the handoff identifies the same case, working
-revision and relevant local changes and confirms a coverage gap, generation
-begins with plan creation or validation instead of repeating the search. A
-missing, inconsistent or stale handoff must be replaced by the same skill's
-Coverage preflight. Load the requested context; do not add another planning
-stage, immediately repeat a successful run, or load unrelated layer
-documentation.
+The selected skill owns test identification, plan creation or validation,
+generation and execution. For API automation, retain the assigned case even
+when a test under another ID implements similar behavior. Reuse its assigned-ID
+test and complete missing requirements. Coverage assessment is a separate
+request; do not insert a coverage stage into this automation workflow.
+For mobile, follow the generation skill's existing preflight procedure.
+Load the requested context; do not add another planning stage, immediately
+repeat a successful run, or load unrelated layer documentation.
 
-| Coverage or generation outcome | Coordinator action |
+| Generation outcome | Coordinator action |
 |---|---|
-| Assigned ID available, including similar behavior only under another ID | Retain `GAP` and continue generation for the selected Test Case. A different-ID test is an implementation reference, not coverage. |
-| Equivalent existing coverage under the assigned ID | Retain the target and coverage comparison; establish exact-target execution evidence in step 3. Apply step 4's conditions for another case check. No duplicate test or new plan. |
-| Assigned ID occupied without equivalent behavior | Record `BLOCKED`, the conflicting target and unmet expected result. Stop; do not rename the case or claim coverage. |
-| New test with a valid passing result | Continue to step 4 with the plan, changes and matching evidence. |
+| API case has no assigned-ID test | Implement the selected case. Tests under other IDs are implementation references and do not discharge the assignment. |
+| API case has one assigned-ID test with missing requirements | Complete that test's missing requirements, then execute it and continue to step 4. |
+| API case is fully implemented under its assigned ID | By default, run that exact target fresh and continue to step 4 without generating a duplicate or a new plan. |
+| `ALREADY_IMPLEMENTED` for an API case, with skipping explicitly requested | Retain the exact target and requirement-to-source mapping; finish this case without edits, execution or final review. This is a source-level implementation assessment, not a fresh passing result. |
+| API ID belongs to unrelated behavior or multiple methods | Record `BLOCKED` and the conflicting targets. Do not remap the ID or create a duplicate. |
+| Mobile generation identifies equivalent existing coverage | Retain its comparison and establish execution evidence in step 3; apply step 4's conditions for another case check. |
+| Created, completed or existing test with a valid passing result | Continue to step 4 with the plan when present, changes and matching evidence. |
 | Unsupported or contradictory plan | Preserve the specific conflict and stop implementation. |
 | Failed or unverified execution | Preserve the actual failing target or missing evidence; use the failure route below. |
 
 ## 3. Establish the execution result
+
+An explicitly requested API `ALREADY_IMPLEMENTED` skip finishes before this step.
+Record that no test ran and no final review was performed. An assigned ID alone
+does not justify skipping: generation must compare the complete case with the
+enabled test and its helpers.
 
 Inspect JUnit, relevant Allure steps/attachments and the command/log for the
 intended non-skipped test with its original assertions and exact target result.
@@ -99,8 +103,10 @@ to contain exactly one `--tests package.Class.method` filter for that target and
 require JUnit and Allure each to contain exactly one result matching it. A broad
 suite is mismatched even when the target, revision and sources match; a name or
 timestamp alone is also insufficient.
-Reuse matching evidence unless a new run is requested, recording the original
-run time and explicitly stating when no test ran in this invocation.
+For API automation without an explicit skip, require a fresh exact-target run
+from this invocation; reuse generation's result without running it twice. For
+mobile, reuse matching evidence unless a new run is requested, recording the
+original run time and explicitly stating when no test ran in this invocation.
 
 When evidence is absent or mismatched and execution is authorized, run the
 existing target without re-entering the generator. For API, follow
@@ -132,7 +138,9 @@ earlier green evidence no longer verifies changed code.
 ## 4. Check the test against the test case
 
 Check every test created or changed by this workflow, including changes to
-helpers that affect the scenario. For an unchanged existing test, reuse the
+helpers that affect the scenario, and every API case executed by this workflow.
+An explicit `ALREADY_IMPLEMENTED` skip does not invoke this stage.
+For an unchanged existing mobile test, reuse the
 current coverage comparison. Repeat the check only when the user requests it,
 the case, relevant contract or test behavior has changed since that comparison,
 or the comparison leaves full coverage unclear.

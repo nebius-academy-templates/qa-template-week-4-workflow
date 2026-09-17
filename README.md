@@ -13,7 +13,8 @@ defect, and checking the result against the original case.
    preserving the directory structure, including hidden directories. Compare
    personal edits before replacing
    the six named skills, `scripts/sync_agent_skills.py`, `test-cases/test-cases.xlsx` and
-   `.agents/hooks/test_repair.py` with this package's versions.
+   `.agents/hooks/test_repair.py` and
+   `agent_docs/task-automation-readiness-instructions.md` with this package's versions.
 3. Use the instructions in `.agents/skills/` with your coding agent. Claude Code
    and Codex are not required to use the skill files.
 
@@ -64,7 +65,7 @@ The script synchronizes all six `SKILL.md` files. The optional
 | Skill | Responsibility |
 |---|---|
 | [automate-test-case](repository-files/.agents/skills/automate-test-case/SKILL.md) | Reuse a saved readiness status or assess the case when no status exists, then coordinate test generation, execution, applicable repair and a final case-conformance check. |
-| [gen-api-test](repository-files/.agents/skills/gen-api-test/SKILL.md) | Check coverage, create or validate the case's plan, generate one API test and verify only its exact target with a fresh test run. |
+| [gen-api-test](repository-files/.agents/skills/gen-api-test/SKILL.md) | Assess coverage when requested, or implement assigned API cases under their assigned IDs and verify each exact target. Skip fully implemented assigned cases only when explicitly requested. |
 | [gen-mobile-test](repository-files/.agents/skills/gen-mobile-test/SKILL.md) | Check coverage, create or validate the case's plan, generate one Appium test and verify it with a fresh test run. |
 | [run-appium-suite](repository-files/.agents/skills/run-appium-suite/SKILL.md) | Use the existing OS-specific runner and inspect actual execution results. |
 | [verify-sandbox-state](repository-files/.agents/skills/verify-sandbox-state/SKILL.md) | Enable and verify a requested sandbox state when the case requires it. |
@@ -135,7 +136,7 @@ the request explicitly asks for reassessment, the coordinator writes the case
 automation assessment to
 `.agent-state/automate-test-case/<case-id>/readiness.md`. Otherwise it records
 the reused status or prepared preflight and its source in the workflow record
-without rerunning the assessment. When new coverage is needed, the selected
+without rerunning the assessment. Before creating or changing a test, the selected
 generator writes `agent_docs/automation-plans/<case-id>.md` before changing test
 code. The workflow record goes to `agent_docs/qa-workflow.md`, or a case-specific
 filename when an existing record belongs to another case.
@@ -144,3 +145,12 @@ The result records what ran, what evidence was reused, which case requirements
 were checked and what remains unresolved. Missing prerequisites, ambiguous
 requirements or a product defect can stop implementation. Completed source
 files alone do not prove a passing run.
+
+For a repeated API batch, explicitly request that already implemented assigned
+cases be skipped. The generator compares each assigned-ID test and its helpers
+with the complete case. It returns `ALREADY_IMPLEMENTED` only when all case
+requirements are already implemented, preserving the target and source mapping.
+That outcome skips execution and final review and does not claim a fresh passing
+run. Incomplete implementations are completed and verified; another test's ID
+cannot discharge the assignment. The Strands application exposes this option
+as `--skip-implemented`.

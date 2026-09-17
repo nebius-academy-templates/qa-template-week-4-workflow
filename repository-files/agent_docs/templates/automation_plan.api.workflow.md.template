@@ -19,12 +19,12 @@
 | Request | `<HTTP method, path, parameters or body, and repository data sources>` |
 | Expected result | `<status and response fields required by the Test Case>` |
 | Contract source | `<OpenAPI path, operation and response model>` |
-| Coverage check | `<current search evidence that the scenario is not already covered>` |
+| Assigned test | `<assigned Allure ID; existing target for this case or evidence that the ID is available>` |
 
 ## Implementation map
 
 Cite a current path and symbol for reused code. For a planned test-layer
-addition, name the file and record the search that found no equivalent. Cover
+addition, name the file and record the search for a reusable symbol. Cover
 the test base, endpoint client, request and response models, test data and test
 class; group items that share a file. Do not import product implementation.
 

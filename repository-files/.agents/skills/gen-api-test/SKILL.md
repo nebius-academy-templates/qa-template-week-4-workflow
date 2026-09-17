@@ -1,78 +1,95 @@
 ---
 name: gen-api-test
-description: Create or validate a case-specific automation plan and generate one Kotlin/JUnit 5 REST Assured API test from one API Test Case and the relevant OpenAPI operation in this repository. Use when asked to plan, generate or cover one API scenario. Follow the rule/client/model/tests/testdata architecture and verify exact response behavior; never use for Appium tests, backend fixes or open-ended repair.
+description: Assess existing API test coverage when requested, or plan, implement and verify assigned API Test Cases with Kotlin, JUnit 5 and REST Assured. Follow the rule/client/model/tests/testdata architecture and the relevant OpenAPI operations. Use for API coverage analysis and test automation, not Appium tests, backend fixes or open-ended repair.
 ---
 
 # Generate an API test
 
 ## Purpose
 
-Create or validate one repository-specific automation plan, then create one
-verified black-box API test from the supplied scenario. Treat OpenAPI as the
-specified contract and a fresh response as runtime evidence. Report any
-disagreement; do not rewrite either source.
+Assess existing API coverage or implement and verify assigned API Test Cases,
+according to the user's request. Treat OpenAPI as the specified contract and a
+fresh response as runtime evidence. Report any disagreement; do not rewrite
+either source.
 
 ## Required inputs
 
 | Input | Requirement |
 |---|---|
-| Test Case | One API behavior with explicit preconditions, request data and expected results |
-| Plan | Required working artifact after the coverage preflight confirms a gap; create it from `agent_docs/templates/automation_plan.api.workflow.md.template` when missing, or validate the existing `agent_docs/automation-plans/<case-id>.md` for this Test Case |
+| Scope | Supplied API Test Cases with preconditions, request data and expected results; for a coverage assessment, the selected cases or requirements to compare |
+| Plan | Required before creating or changing test code; create it from `agent_docs/templates/automation_plan.api.workflow.md.template` when missing, or validate the existing `agent_docs/automation-plans/<case-id>.md` for this Test Case |
 | Contract | Relevant operation from `fake-api/openapi.yaml` |
 
 Use the complete Test Case text supplied by the task. Do not assume that a case
 exists under `fixtures/`.
 
-## Coverage preflight
+## Choose the requested task
 
-Run this preflight before validating the plan or loading
-implementation-specific context. A separate coverage operation that is
-read-only with respect to repository source may perform this section and pass
-its result to generation. Reuse that handoff only when it identifies the same
-Test Case, working revision and relevant local changes and contains the
-comparison required below. A `GAP` handoff must also confirm that the assigned
-ID is available. An equivalent-coverage handoff must name the exact target that
-carries the assigned ID and include matching exact-target execution evidence
-before it can report `ALREADY_COVERED`. If the handoff is missing,
-inconsistent or stale, repeat this same preflight rather than introducing a
-second set of coverage rules.
+| Request | Action |
+|---|---|
+| Assess existing coverage | Compare the selected requirements with current tests and report the evidence. No plan, code change or test run is required by this assessment alone. |
+| Plan or automate supplied Test Cases | Process each selected case under its assigned Allure ID. Continue with assigned-test identification below; coverage under another ID does not remove a case from the assignment. |
+| Implement only missing coverage | Assess coverage first, then implement the missing or incomplete cases within the requested scope. |
 
-To perform the preflight:
+A supplied case or list of cases followed by an instruction to implement or
+automate them selects automation. Do not insert an unsolicited coverage
+assessment that skips those cases. For a batch, preserve the user's selection and order and
+apply the implementation procedure to each case separately.
 
-1. Search current API coverage with
-   `rg -n '@DisplayName|@AllureId' api-tests/src/test/kotlin/tests`; there is no registry file.
-2. Find the test target that carries the Test Case's assigned `@AllureId`.
-   Coverage of the selected Test Case is keyed by this ID, not only by similar
-   behavior.
-3. If no target carries the assigned ID, report `GAP` and confirm that the ID is
-   available. A test under another Allure ID may be cited as an implementation
-   reference, but it does not cover the selected Test Case and must not block
-   generation.
-4. If a target carries the assigned ID, compare its complete behavior and
-   expected result with the Test Case. When they are equivalent, cite the file,
-   class and test method and retain the coverage comparison. Reuse matching
-   exact-target evidence or run that one target as specified in `Verification
-   and result`. Report `ALREADY_COVERED` only after fresh or reused evidence
-   proves that exact target passed. If execution is unavailable or the target
-   fails, retain the comparison but report the actual unverified or failed
-   result instead of claiming completed coverage.
-5. If the assigned ID is occupied by a target that does not prove equivalent
-   behavior, report `BLOCKED`, the conflicting target and the unmet Test Case
-   behavior. Do not generate a duplicate, remap the ID or claim coverage.
+## Assess existing coverage
 
-Neither an equivalent-coverage result nor an occupied-ID conflict requires an
-automation plan. Only equivalent existing behavior under the assigned ID with
-matching exact-target execution evidence can produce `ALREADY_COVERED`. When
-the preflight confirms a coverage gap and the assigned ID is available, create
-or validate the plan before editing test code. A generation operation that
-receives a current `GAP` handoff begins here and does not repeat the coverage
-search.
+Use this procedure for a coverage request, including an explicit request to
+implement only missing coverage:
+
+1. Search current API test sources using the `@DisplayName|@AllureId` inventory
+   command from `AGENTS.md`. Read candidate methods and their relevant helpers.
+2. Compare the selected preconditions, actions and every expected result with
+   the setup, requests and assertions in those tests. A shared endpoint, similar
+   name or matching ID alone does not establish coverage. Equivalent behavior
+   may be implemented under another ID; record that target and ID explicitly.
+3. For each case or requirement, report whether coverage is complete, partial,
+   absent, or cannot be established from the available evidence. Cite exact
+   test targets and source locations, and name the missing assertions or
+   uncertain requirements.
+4. Distinguish source coverage from execution proof. Cite any available run
+   evidence with its scope and freshness; do not describe source inspection as
+   a fresh passing run.
+
+After an assessment-only request, return the findings. Continue to planning or
+implementation only when that work is part of the user's request. If coverage
+analysis accompanies an instruction to automate all supplied cases, retain all
+of them. Omit cases only when the user explicitly asks for missing coverage or
+for already implemented assigned cases to be skipped as described below.
+
+## Identify the assigned test
+
+Search the current API test sources for the Test Case's assigned `@AllureId`.
+
+- If no method has that ID, implement the assigned case as a new test.
+- If one method implements this case, use it and complete any missing case
+  requirements. For an automation request, if it already satisfies the full case,
+  proceed to verification without creating another test or a new plan.
+- If the ID belongs to unrelated behavior or multiple methods, stop and report
+  the conflicting targets. Do not remap the ID or create another test with it.
+
+Tests with other IDs may provide implementation examples. They do not discharge
+an explicit assignment to automate this case, even when their behavior is
+equivalent. Create or validate the plan before changing test code.
+
+If the request explicitly says to skip already implemented cases, compare the
+assigned-ID test and its helpers with the complete case before editing or running.
+Check preconditions, actions, every expected result and resulting state. When all
+requirements are already implemented by an enabled JUnit test, return
+`ALREADY_IMPLEMENTED` with the exact
+target and a requirement-to-source mapping. Do not create a plan, change files or
+execute the test for this outcome. It records a source-level implementation
+decision, not a fresh passing run. An ID match alone is insufficient. If the test
+is incomplete, implement the missing requirements and verify it normally.
 
 ## Plan creation and validation
 
 Use `agent_docs/templates/automation_plan.api.workflow.md.template` as the required schema. Do not add
-sections or leave placeholders. Replace `<case-id>` in the plan path with the
-supplied case ID, for example `API-2007` or `MOB-1007`.
+sections or leave placeholders.
 
 1. If `agent_docs/automation-plans/<case-id>.md` is missing, create it for the supplied Test Case.
 2. If it already describes the same Test Case, validate every claim against
@@ -97,7 +114,7 @@ plan.
 ## Required context
 
 `AGENTS.md` is already loaded; use its repository rules and source-routing
-table without reading the file again. Before planning or editing, read:
+table without reading the file again. Before assessing, planning or editing, read:
 
 1. `agent_docs/AI_POLICY.md`;
 2. `api-tests/README.md`;
@@ -117,8 +134,9 @@ do not restate them in this skill.
    repository policy.
 3. Apply the assertion rules below.
 
-Use the `@AllureId` assigned by the Test Case and verify that it is not already
-present. Do not invent or remap the ID during generation.
+Preserve the Test Case's assigned `@AllureId` on its one implementation. Before
+adding a new method, verify that the ID is still available. Do not invent or
+remap the ID during generation.
 
 Abort generation before editing when any condition applies:
 
@@ -145,19 +163,16 @@ test.
 
 1. Start `fake-api` with the setup documented in `api-tests/README.md` and
    `agent_docs/building_the_project.md`.
-2. Run only the exact `package.Class.method` for the generated test or for an
-   equivalent existing test under the selected assigned ID, using the API test
-   task, `--tests
-   package.Class.method` and `--rerun` (or `--rerun-tasks`). Do not run the
-   whole API suite as verification for this one-case workflow.
+2. Run only the assigned test's exact `package.Class.method` with the API test
+   task, `--tests package.Class.method` and `--rerun` (or `--rerun-tasks`). Do
+   not run the whole API suite as verification for this one-case workflow.
 3. Require fresh JUnit XML containing exactly one matching, passing,
    non-skipped test. A cached task, zero matching tests, or another passing
-   target does not verify the generated test.
+   target does not verify the assigned test, including an existing implementation.
 4. Inspect the matching Allure scenario step and attached HTTP request and
    response.
 
 On success, report the Test Case ID, exact target, changed files, assertions,
-command and observed result. For unchanged equivalent coverage under the
-assigned ID, also report the retained coverage comparison and that no files
-changed. On failure, report the smallest relevant evidence and stop. Test
-repair and backend modification require separate authorization.
+command and observed result for the generated test. On failure, report the
+smallest relevant evidence and stop. Test repair and backend modification
+require separate authorization.
