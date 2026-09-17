@@ -52,8 +52,7 @@ another case (see Workflow record). Update the record after each step.
 
 Invoke `gen-api-test` (API) or `gen-mobile-test` (mobile) with the original
 case and the readiness result. The generation skill owns test identification by
-assigned ID, the plan, the implementation and its own run. Do not add a
-planning or coverage stage around it.
+assigned ID, the plan, the implementation and its own run.
 
 Keep the assigned case ID. A test under another ID is an implementation
 reference, not a substitute. If the user asked to skip implemented cases,
