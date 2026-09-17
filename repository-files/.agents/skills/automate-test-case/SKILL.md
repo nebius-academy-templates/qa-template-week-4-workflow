@@ -63,21 +63,26 @@ immediately repeat a successful run, or load unrelated layer documentation.
 ## 3. Establish the execution result
 
 Inspect JUnit, relevant Allure steps/attachments and the command/log for the
-intended non-skipped test with its original assertions and the suite outcome.
+intended non-skipped test with its original assertions and exact target result.
 Coverage, compilation or a shell exit alone cannot establish passing execution;
 missing XML leaves it unverified.
 
 Match earlier evidence to the current target, revision and relevant local changes,
-including untracked test sources; a name or timestamp alone is insufficient.
+including untracked test sources. For API evidence, require the recorded command
+to contain exactly one `--tests package.Class.method` filter for that target and
+require JUnit and Allure each to contain exactly one result matching it. A broad
+suite is mismatched even when the target, revision and sources match; a name or
+timestamp alone is also insufficient.
 Reuse matching evidence unless a new run is requested, recording the original
 run time and explicitly stating when no test ran in this invocation.
 
 When evidence is absent or mismatched and execution is authorized, run the
 existing target without re-entering the generator. For API, follow
 `api-tests/README.md` and `agent_docs/building_the_project.md` for backend setup
-and a fresh full suite; for mobile, use `run-appium-suite` and its supported
-filter. Retain the revision and relevant local source changes before the run
-to match the resulting evidence.
+and run only the exact `package.Class.method` fresh with the API test task,
+`--tests package.Class.method` and `--rerun` (or `--rerun-tasks`). For mobile,
+use `run-appium-suite` and its supported filter. Retain the revision and
+relevant local source changes before the run to match the resulting evidence.
 
 If execution is outside scope or unavailable, record `NOT_VERIFIED` and the
 missing proof. Source conformance may still be inspected; it does not establish
@@ -85,15 +90,15 @@ execution or readiness for integration.
 
 ### Failure route
 
-Distinguish failures of the target, other suite tests and execution/setup;
-retain both the target result and unresolved suite result.
+Distinguish a failure of the exact target from an execution or setup failure;
+retain the target result and the evidence that supports that classification.
 
 For authorized repair of that failure, follow `.agents/skills/test-repair/SKILL.md`
 with the exact target and decisive evidence, retaining its classification and
 outcome. Use the installed queue, locks and both budgets without clearing or
 restarting them or automatically dispatching unrelated work. An incompatible lock blocks
-execution until resolved through that procedure; never run a broad suite
-through a repair lock.
+execution until resolved through that procedure; every repair run remains
+locked to the same exact target.
 
 After a verified correction, continue to step 4 with matching new evidence;
 earlier green evidence no longer verifies changed code.
@@ -124,7 +129,7 @@ Include in the workflow record and final summary:
 - case source, working revision and relevant local changes;
 - selected route, operations, instructions and observed outcomes;
 - target `Class.method`, plan and changed paths when applicable;
-- target/suite results, evidence paths and source versions, reused versus new evidence;
+- exact target result, evidence paths and source versions, reused versus new evidence;
 - case check performed or coverage comparison reused; supported gaps with the case
   requirement, test location and consequence;
 - remaining work and next action, with supporting evidence.
@@ -132,5 +137,5 @@ Include in the workflow record and final summary:
 Product bugs, exhausted budgets and unresolved investigations remain unresolved.
 A supported stop is a workflow result, not a completed passing test. A `skipped`
 queue outcome or passing test with missing case assertions does not establish
-successful test completion. Keep unresolved suite failures, missing proof and
-stale evidence visible.
+successful test completion. Keep target failures, missing proof and stale
+evidence visible.

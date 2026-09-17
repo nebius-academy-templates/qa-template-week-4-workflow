@@ -117,12 +117,18 @@ test.
 
 ## Verification and result
 
-1. Start `fake-api` and run the full API suite with the commands documented in
-   `api-tests/README.md` and `agent_docs/building_the_project.md`.
-2. Require a fresh run that bypasses the Gradle test cache.
-3. Inspect the Allure scenario step and attached HTTP request and response.
+1. Start `fake-api` with the setup documented in `api-tests/README.md` and
+   `agent_docs/building_the_project.md`.
+2. Run only the generated test's exact `package.Class.method` with the API test
+   task, `--tests package.Class.method` and `--rerun` (or `--rerun-tasks`). Do
+   not run the whole API suite as verification for this one-case workflow.
+3. Require fresh JUnit XML containing exactly one matching, passing,
+   non-skipped test. A cached task, zero matching tests, or another passing
+   target does not verify the generated test.
+4. Inspect the matching Allure scenario step and attached HTTP request and
+   response.
 
-On success, report the Test Case ID, changed files, assertions, command and
-observed result for the generated test. On failure, report the smallest
-relevant evidence and stop. Test repair and backend modification require
-separate authorization.
+On success, report the Test Case ID, exact target, changed files, assertions,
+command and observed result for the generated test. On failure, report the
+smallest relevant evidence and stop. Test repair and backend modification
+require separate authorization.
