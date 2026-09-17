@@ -25,15 +25,31 @@ replacement for the repair queue or a persisted execution engine.
 If an instruction or required source is missing, report the dependency rather
 than silently substituting another tool.
 
-## 1. Can this test case be automated?
+## 1. Select or establish the readiness status
 
-Follow `agent_docs/task-automation-readiness-instructions.md`, or the supplied
-alternative, including its source-only scope and status definitions. Recheck
-the decisive sources of any supplied earlier assessment. Write the selected-case
-report to the requested assessment path or
+First inspect the selected case for a saved readiness status. The recognized
+values are `READY FOR AUTOMATION` (the workbook label for `READY`), `BLOCKED`
+and `NEEDS_CLARIFICATION`. Reuse a recognized status without reassessing the
+case unless the current request explicitly asks for a new assessment. Record
+the reused value, its source and any supplied assessment report in the workflow
+output. `TODO`, a blank value and a test-source reference are not readiness
+statuses and must not bypass assessment by themselves.
+
+An explicit host prepared-batch mode may replace model readiness for a
+statusless course-curated case only after deterministic validation of the
+selected workbook rows and all required non-empty fields. Record this as a
+prepared preflight, not as a new source-based readiness opinion. Never infer
+prepared-case authorization merely from `TODO`, a blank value, a source path,
+or the number of selected cases.
+
+When there is no recognized saved status or explicit prepared preflight, or
+when reassessment was explicitly requested, follow
+`agent_docs/task-automation-readiness-instructions.md`, or the supplied
+alternative, including its source-only scope and status definitions. Write the
+selected-case report to the requested assessment path or
 `.agent-state/automate-test-case/<case-id>/readiness.md`, separately from the
-workflow output; preserve any broader report. Only after assessment finishes,
-record its outcome and continue:
+workflow output; preserve any broader report. Then record the selected outcome
+and continue:
 
 | Assessment result | Next action |
 |---|---|
@@ -41,18 +57,27 @@ record its outcome and continue:
 | `BLOCKED` | Record the confirmed missing capability and evidence; stop implementation. |
 | `NEEDS_CLARIFICATION` | Record the question that changes the decision; stop implementation. |
 
-## 2. Delegate generation; interpret its result
+## 2. Delegate coverage and generation; interpret the result
 
 Follow `.agents/skills/gen-api-test/SKILL.md` for API or
 `.agents/skills/gen-mobile-test/SKILL.md` for mobile, passing the original case
 and selected automation assessment. Use the current session or an optional subagent
 when supported.
 
-The selected skill owns coverage preflight, plan creation/validation, generation
-and execution. Load its requested context; do not add another planning stage,
-immediately repeat a successful run, or load unrelated layer documentation.
+The selected skill owns the coverage-preflight rules, plan
+creation/validation, generation and execution. A coordinator may run that
+skill's Coverage preflight as a separate operation that is read-only with
+respect to repository source before invoking a write-capable generation
+operation. Pass its complete result forward; do not create independent
+deduplication criteria. When the handoff identifies the same case, working
+revision and relevant local changes and confirms a coverage gap, generation
+begins with plan creation or validation instead of repeating the search. A
+missing, inconsistent or stale handoff must be replaced by the same skill's
+Coverage preflight. Load the requested context; do not add another planning
+stage, immediately repeat a successful run, or load unrelated layer
+documentation.
 
-| Generation outcome | Coordinator action |
+| Coverage or generation outcome | Coordinator action |
 |---|---|
 | Equivalent existing coverage | Retain the target and coverage comparison; establish execution evidence in step 3. Apply step 4's conditions for another case check. No duplicate test or new plan. |
 | Occupied ID without equivalent behavior | Record the conflicting target and unmet expected result. Stop; do not rename the case or claim coverage. |

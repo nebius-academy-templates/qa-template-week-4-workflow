@@ -63,7 +63,7 @@ The script synchronizes all six `SKILL.md` files. The optional
 
 | Skill | Responsibility |
 |---|---|
-| [automate-test-case](repository-files/.agents/skills/automate-test-case/SKILL.md) | Assess whether a case can be automated, then coordinate test generation, execution, applicable repair and a final case-conformance check. |
+| [automate-test-case](repository-files/.agents/skills/automate-test-case/SKILL.md) | Reuse a saved readiness status or assess the case when no status exists, then coordinate test generation, execution, applicable repair and a final case-conformance check. |
 | [gen-api-test](repository-files/.agents/skills/gen-api-test/SKILL.md) | Check coverage, create or validate the case's plan, generate one API test and verify only its exact target with a fresh test run. |
 | [gen-mobile-test](repository-files/.agents/skills/gen-mobile-test/SKILL.md) | Check coverage, create or validate the case's plan, generate one Appium test and verify it with a fresh test run. |
 | [run-appium-suite](repository-files/.agents/skills/run-appium-suite/SKILL.md) | Use the existing OS-specific runner and inspect actual execution results. |
@@ -84,8 +84,16 @@ Modules 1-3. The other five cases have a status of `READY FOR AUTOMATION`,
 `READY FOR AUTOMATION` is the workbook label for the assessment result `READY`.
 Verify test references in your own checkout, where generated class or method
 names may differ. Neither a source reference nor a readiness status proves a
-passing run. Preserve your completed assessment report with its evidence;
-the coordinator rechecks the selected case against current sources.
+passing run. The coordinator reuses one of these three readiness statuses and
+does not reassess it unless the current request explicitly asks for a new
+assessment. `TODO`, a blank cell and a test-source reference are not readiness
+statuses; they do not skip assessment by themselves. An application may expose
+an explicit prepared-batch mode for course-curated cases. In that mode, it may
+replace the model assessment with deterministic workbook validation only after
+checking the selected case rows and required non-empty fields, and it must
+record that the decision came from the prepared preflight rather than a
+readiness assessment. Preserve a completed assessment report with its evidence
+so a reused status retains its original context.
 
 ## Project documents used by the workflow
 
@@ -119,12 +127,15 @@ preconditions, actions and expected results:
 Automate <case-id> from test-cases/test-cases.xlsx using .agents/skills/automate-test-case/SKILL.md.
 ```
 
-The coordinator writes the case automation assessment to
-`.agent-state/automate-test-case/<case-id>/readiness.md`. When new coverage is
-needed, the selected generator writes
-`agent_docs/automation-plans/<case-id>.md` before changing test code. The workflow
-record goes to `agent_docs/qa-workflow.md`, or a case-specific filename when an
-existing record belongs to another case.
+When no saved readiness status or explicit prepared preflight exists, or when
+the request explicitly asks for reassessment, the coordinator writes the case
+automation assessment to
+`.agent-state/automate-test-case/<case-id>/readiness.md`. Otherwise it records
+the reused status or prepared preflight and its source in the workflow record
+without rerunning the assessment. When new coverage is needed, the selected
+generator writes `agent_docs/automation-plans/<case-id>.md` before changing test
+code. The workflow record goes to `agent_docs/qa-workflow.md`, or a case-specific
+filename when an existing record belongs to another case.
 
 The result records what ran, what evidence was reused, which case requirements
 were checked and what remains unresolved. Missing prerequisites, ambiguous

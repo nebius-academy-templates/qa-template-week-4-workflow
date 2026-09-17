@@ -25,22 +25,39 @@ exists under `fixtures/`.
 
 ## Coverage preflight
 
-Run this preflight before validating the plan or loading implementation-specific
-context:
+Run this preflight before validating the plan or loading
+implementation-specific context. A separate coverage operation that is
+read-only with respect to repository source may perform this section and pass
+its result to generation. Reuse that handoff only when it identifies the same
+Test Case, working revision and relevant local changes and contains the
+comparison required below. A `GAP` handoff must also confirm that the assigned
+ID is available. An equivalent-coverage handoff must name the exact target and
+include matching exact-target execution evidence before it can report
+`ALREADY_COVERED`. If the handoff is missing, inconsistent or stale, repeat
+this same preflight rather than introducing a second set of coverage rules.
+
+To perform the preflight:
 
 1. Search current API coverage with
    `rg -n '@DisplayName|@AllureId' api-tests/src/test/kotlin/tests`; there is no registry file.
 2. Compare the Test Case behavior and expected result with current tests.
-3. If current coverage already proves the complete Test Case behavior, stop.
-   Cite the existing file, class and test method, retain the coverage
-   comparison, and report that no files changed.
+3. If current coverage already proves the complete Test Case behavior, cite the
+   existing file, class and test method and retain the coverage comparison.
+   Reuse matching exact-target evidence or run that one target as specified in
+   `Verification and result`. Report `ALREADY_COVERED` only after fresh or
+   reused evidence proves that exact target passed. If execution is unavailable
+   or the target fails, retain the comparison but report the actual unverified
+   or failed result instead of claiming completed coverage.
 4. If the assigned `@AllureId` is occupied but the existing test does not prove
    equivalent behavior, stop. Report the conflicting target and the unmet Test
    Case behavior. Do not generate a duplicate, remap the ID or claim coverage.
 
-Neither stop requires an automation plan. Only equivalent existing behavior is
-coverage. When the preflight confirms a coverage gap and the assigned ID is
-available, create or validate the plan before editing test code.
+Neither an equivalent-coverage result nor an occupied-ID conflict requires an
+automation plan. Only equivalent existing behavior with matching exact-target
+execution evidence can produce `ALREADY_COVERED`. When the preflight confirms
+a coverage gap and the assigned ID is available, create or validate the plan
+before editing test code. A generation operation that receives a current `GAP`
+handoff begins here and does not repeat the coverage search.
 
 ## Plan creation and validation
 
@@ -119,9 +136,10 @@ test.
 
 1. Start `fake-api` with the setup documented in `api-tests/README.md` and
    `agent_docs/building_the_project.md`.
-2. Run only the generated test's exact `package.Class.method` with the API test
-   task, `--tests package.Class.method` and `--rerun` (or `--rerun-tasks`). Do
-   not run the whole API suite as verification for this one-case workflow.
+2. Run only the generated or equivalent existing test's exact
+   `package.Class.method` with the API test task, `--tests
+   package.Class.method` and `--rerun` (or `--rerun-tasks`). Do not run the
+   whole API suite as verification for this one-case workflow.
 3. Require fresh JUnit XML containing exactly one matching, passing,
    non-skipped test. A cached task, zero matching tests, or another passing
    target does not verify the generated test.
@@ -129,6 +147,7 @@ test.
    response.
 
 On success, report the Test Case ID, exact target, changed files, assertions,
-command and observed result for the generated test. On failure, report the
-smallest relevant evidence and stop. Test repair and backend modification
+command and observed result. For unchanged equivalent coverage, also report
+the retained coverage comparison and that no files changed. On failure, report
+the smallest relevant evidence and stop. Test repair and backend modification
 require separate authorization.
