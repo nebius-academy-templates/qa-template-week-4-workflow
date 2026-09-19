@@ -13,9 +13,8 @@ defect, and checking the result against the original case.
    preserving the directory structure, including hidden directories. Compare
    personal edits before replacing
    the six named skills, `scripts/sync_agent_skills.py`, `test-cases/test-cases.xlsx`,
-   `.agents/hooks/test_repair.py`,
-   `agent_docs/task-automation-readiness-instructions.md` and
-   `appium-tests/src/test/kotlin/rule/AppiumTestCase.kt` with this package's versions.
+   `.agents/hooks/test_repair.py` and
+   `agent_docs/task-automation-readiness-instructions.md` with this package's versions.
 3. Use the instructions in `.agents/skills/` with your coding agent. Claude Code
    and Codex are not required to use the skill files.
 
@@ -27,21 +26,24 @@ depends on the coding agent; copying a `SKILL.md` alone does not install a hook.
 
 ### Mobile step evidence
 
-The package updates
-[`AppiumTestCase.kt`](repository-files/appium-tests/src/test/kotlin/rule/AppiumTestCase.kt)
-in your project. Each successful named `step(...)` attaches a `Screen after step`
-PNG and `UI page source` XML to the same Allure step. The XML is the runtime
-hierarchy exposed by Appium for both Compose and classic Android Views.
+After copying the package, run these commands from your project repository root:
 
-If you have customized this base class, merge the `attachScreenState()` helper
-and keep `step(...)` calling it after its body completes successfully. Preserve
-your session and sandbox changes. Screenshot and XML capture are independent;
-a capture error does not change the test outcome or prevent the other capture.
-Failed steps continue to use the existing `ArtifactsOnFailure` extension.
+```shell
+git apply --check patches/mobile-step-ui-evidence.patch
+git apply patches/mobile-step-ui-evidence.patch
+```
 
-This update is installed in your working copy as part of Week 4. The upstream
-practice starter is unchanged. It supplies mobile execution evidence to the
-skills; the separate published Strands starter remains API-only.
+Apply the patch only if the check succeeds. The
+[patch](repository-files/patches/mobile-step-ui-evidence.patch) changes only
+`attachScreenState()` in `appium-tests/src/test/kotlin/rule/AppiumTestCase.kt`.
+It keeps screenshots and adds runtime UI XML after successful named steps.
+Both captures are independent and preserve the test outcome if either fails.
+The XML includes the hierarchy exposed by Appium for Compose and classic Views.
+
+If the check fails, the patch may already be applied or the method may have local
+changes. Compare the small patch with your method and merge only missing changes.
+The rest of the base class is left intact. The separate Strands starter remains
+API-only.
 
 ### Read the Excel workbook
 
