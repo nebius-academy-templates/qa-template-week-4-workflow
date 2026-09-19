@@ -15,8 +15,7 @@ defect, and checking the result against the original case.
    the six named skills, `scripts/sync_agent_skills.py`, `test-cases/test-cases.xlsx`,
    `.agents/hooks/test_repair.py` and
    `agent_docs/task-automation-readiness-instructions.md` with this package's versions.
-3. Use the instructions in `.agents/skills/` with your coding agent. Claude Code
-   and Codex are not required to use the skill files.
+3. Use the instructions in `.agents/skills/` with your coding agent.
 
 The repair runtime requires Python 3.11 or newer. If you use Claude Code or
 Codex, preserve the corresponding existing hook configuration:
@@ -42,8 +41,6 @@ The XML includes the hierarchy exposed by Appium for Compose and classic Views.
 
 If the check fails, the patch may already be applied or the method may have local
 changes. Compare the small patch with your method and merge only missing changes.
-The rest of the base class is left intact. The separate Strands starter remains
-API-only.
 
 ### Read the Excel workbook
 
@@ -94,25 +91,21 @@ The script synchronizes all six `SKILL.md` files. The optional
 
 ## Included test cases
 
-[test-cases.xlsx](repository-files/test-cases/test-cases.xlsx) contains all 18
-cases from the [Module 3 workbook](https://github.com/nebius-academy-templates/qa-template-week-3-agents/blob/main/test-cases.xlsx):
-10 mobile and 8 API cases. Match `Case Summary` and `Steps` by `Case ID` to read
+[test-cases.xlsx](repository-files/test-cases/test-cases.xlsx) contains 10 mobile
+and 8 API cases. Match `Case Summary` and `Steps` by `Case ID` to read
 the complete preconditions, actions and expected results. `Endpoints` is a
 column in `Case Summary`.
 
-The `Automated Test` column contains 13 expected test-source references after
-Modules 1-3. The other five cases have a status of `READY FOR AUTOMATION`,
-`BLOCKED` or `NEEDS_CLARIFICATION`, based on the Lesson 3.5 assessment.
+The `Automated Test` column contains test-source references or a readiness status:
+`READY FOR AUTOMATION`, `BLOCKED` or `NEEDS_CLARIFICATION`.
 `READY FOR AUTOMATION` is the workbook label for the assessment result `READY`.
 Verify test references in your own checkout, where generated class or method
 names may differ. Neither a source reference nor a readiness status proves a
 passing run. The coordinator reuses one of these three readiness statuses and
 does not reassess it unless the current request explicitly asks for a new
 assessment. `TODO`, a blank cell and a test-source reference are not readiness
-statuses; they do not skip assessment by themselves. The Strands application
-in the Week 4 Strands package adds its own `--prepared-cases` mode; it is not
-part of this skill. Preserve a completed assessment report with its evidence
-so a reused status retains its original context.
+statuses; they do not skip assessment by themselves. Preserve a completed
+assessment report with its evidence so a reused status retains its original context.
 
 ## Project documents used by the workflow
 
@@ -129,34 +122,27 @@ from this package checkout.
 | Execution and repair | Existing runners, `.agents/hooks/test_repair.py`, installed hook configuration and matching exact-target JUnit/Allure evidence |
 | Final case check | The original case, the final test and the helpers it calls, the plan when present, and matching exact-target JUnit/Allure/HTTP evidence when a run exists |
 
-`agent_docs/environment_notes.md` and the earlier
+`agent_docs/environment_notes.md` and
 `agent_docs/task-automation-readiness.md` remain useful context. They do not
 replace current environment checks or the selected case's current assessment.
 `agent_docs/review_template.md` belongs to the supplied GitHub PR reviewer;
-the coordinator's final case check follows the original test case. In a
-coding-agent session the coordinator reads these inputs directly; the Strands
-application assembles them into one packet for its review agent.
+the coordinator's final case check follows the original test case.
 
-## Optional direct use
+## Run a case
 
-Installing the package does not require running a case. Use the coordinating
-skill when a lesson or task asks you to automate a named case. Supply the full
-case from the packaged `test-cases/test-cases.xlsx`, including its
-preconditions, actions and expected results:
+Supply a case ID from `test-cases/test-cases.xlsx`. The coordinator reads its
+complete preconditions, actions and expected results:
 
 ```text
 Automate <case-id> from test-cases/test-cases.xlsx using .agents/skills/automate-test-case/SKILL.md.
 ```
 
-When no saved readiness status exists, or when the request explicitly asks for
-reassessment, the coordinator writes the case
-automation assessment to
-`.agent-state/automate-test-case/<case-id>/readiness.md`. Otherwise it records
-the reused status and its source in the workflow record without rerunning the
-assessment. Before creating or changing a test, the selected
-generator writes `agent_docs/automation-plans/<case-id>.md` before changing test
-code. The workflow record goes to `agent_docs/qa-workflow.md`, or a case-specific
-filename when an existing record belongs to another case.
+When assessment runs, the coordinator saves it to
+`.agent-state/automate-test-case/<case-id>/readiness.md`. Before changing test
+code, the generator creates or validates
+`agent_docs/automation-plans/<case-id>.md`. The workflow record goes to
+`agent_docs/qa-workflow.md`, or a case-specific filename when an existing record
+belongs to another case.
 
 The result records what ran, what evidence was reused, which case requirements
 were checked and what remains unresolved. Missing prerequisites, ambiguous
@@ -169,5 +155,7 @@ with the complete case. It returns `ALREADY_IMPLEMENTED` only when all case
 requirements are already implemented, preserving the target and source mapping.
 That outcome skips execution and final review and does not claim a fresh passing
 run. Incomplete implementations are completed and verified; another test's ID
-cannot discharge the assignment. The Strands application exposes this option
-as `--skip-implemented`.
+cannot discharge the assignment.
+
+For Python execution and CLI options, see the
+[API-only Strands workflow README](https://github.com/nebius-academy-templates/qa-template-week-4-strands-agents/blob/main/repository-files/strands-workflow/README.md).
