@@ -12,9 +12,10 @@ defect, and checking the result against the original case.
 2. Copy the contents of `repository-files/` into your project repository,
    preserving the directory structure, including hidden directories. Compare
    personal edits before replacing
-   the six named skills, `scripts/sync_agent_skills.py`, `test-cases/test-cases.xlsx` and
-   `.agents/hooks/test_repair.py` and
-   `agent_docs/task-automation-readiness-instructions.md` with this package's versions.
+   the six named skills, `scripts/sync_agent_skills.py`, `test-cases/test-cases.xlsx`,
+   `.agents/hooks/test_repair.py`,
+   `agent_docs/task-automation-readiness-instructions.md` and
+   `appium-tests/src/test/kotlin/rule/AppiumTestCase.kt` with this package's versions.
 3. Use the instructions in `.agents/skills/` with your coding agent. Claude Code
    and Codex are not required to use the skill files.
 
@@ -23,6 +24,24 @@ Codex, preserve the corresponding existing hook configuration:
 `.claude/settings.json` for Claude Code or `.codex/hooks.json` for Codex. It must
 invoke `.agents/hooks/test_repair.py` with the appropriate adapter. Hook setup
 depends on the coding agent; copying a `SKILL.md` alone does not install a hook.
+
+### Mobile step evidence
+
+The package updates
+[`AppiumTestCase.kt`](repository-files/appium-tests/src/test/kotlin/rule/AppiumTestCase.kt)
+in your project. Each successful named `step(...)` attaches a `Screen after step`
+PNG and `UI page source` XML to the same Allure step. The XML is the runtime
+hierarchy exposed by Appium for both Compose and classic Android Views.
+
+If you have customized this base class, merge the `attachScreenState()` helper
+and keep `step(...)` calling it after its body completes successfully. Preserve
+your session and sandbox changes. Screenshot and XML capture are independent;
+a capture error does not change the test outcome or prevent the other capture.
+Failed steps continue to use the existing `ArtifactsOnFailure` extension.
+
+This update is installed in your working copy as part of Week 4. The upstream
+practice starter is unchanged. It supplies mobile execution evidence to the
+skills; the separate published Strands starter remains API-only.
 
 ### Read the Excel workbook
 
