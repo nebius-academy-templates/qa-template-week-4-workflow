@@ -12,7 +12,7 @@ defect, and checking the result against the original case.
 2. Copy the contents of `repository-files/` into your project repository,
    preserving the directory structure, including hidden directories. Compare
    personal edits before replacing
-   the six named skills, `scripts/sync_agent_skills.py`, `test-cases/test-cases.xlsx` and
+   the six named skills, `scripts/sync_agent_skills.py`, `test-cases/test-cases.xlsx`,
    `.agents/hooks/test_repair.py` and
    `agent_docs/task-automation-readiness-instructions.md` with this package's versions.
 3. Use the instructions in `.agents/skills/` with your coding agent. Claude Code
@@ -23,6 +23,27 @@ Codex, preserve the corresponding existing hook configuration:
 `.claude/settings.json` for Claude Code or `.codex/hooks.json` for Codex. It must
 invoke `.agents/hooks/test_repair.py` with the appropriate adapter. Hook setup
 depends on the coding agent; copying a `SKILL.md` alone does not install a hook.
+
+### Mobile step evidence
+
+After copying the package, run these commands from your project repository root:
+
+```shell
+git apply --check patches/mobile-step-ui-evidence.patch
+git apply patches/mobile-step-ui-evidence.patch
+```
+
+Apply the patch only if the check succeeds. The
+[patch](repository-files/patches/mobile-step-ui-evidence.patch) changes only
+`attachScreenState()` in `appium-tests/src/test/kotlin/rule/AppiumTestCase.kt`.
+It keeps screenshots and adds runtime UI XML after successful named steps.
+Both captures are independent and preserve the test outcome if either fails.
+The XML includes the hierarchy exposed by Appium for Compose and classic Views.
+
+If the check fails, the patch may already be applied or the method may have local
+changes. Compare the small patch with your method and merge only missing changes.
+The rest of the base class is left intact. The separate Strands starter remains
+API-only.
 
 ### Read the Excel workbook
 
