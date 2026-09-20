@@ -156,6 +156,3 @@ requirements are already implemented, preserving the target and source mapping.
 That outcome skips execution and final review and does not claim a fresh passing
 run. Incomplete implementations are completed and verified; another test's ID
 cannot discharge the assignment.
-
-For Python execution and CLI options, see the
-[API-only Strands workflow README](https://github.com/nebius-academy-templates/qa-template-week-4-strands-agents/blob/main/repository-files/strands-workflow/README.md).
