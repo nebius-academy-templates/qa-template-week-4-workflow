@@ -1,7 +1,7 @@
 # QA workflow skills
 
 Install this package into your Kotlin project repository. It
-provides the complete 18-case workbook and six skills for assessing a case,
+provides the complete 20-case workbook and six skills for assessing a case,
 planning and generating its test, executing it, repairing a supported test
 defect, and checking the result against the original case.
 
@@ -94,15 +94,25 @@ The script synchronizes all six `SKILL.md` files. The optional
 
 ## Included test cases
 
-[test-cases.xlsx](repository-files/test-cases/test-cases.xlsx) contains all 18
-cases from the [Module 3 workbook](https://github.com/nebius-academy-templates/qa-template-week-3-agents/blob/main/test-cases.xlsx):
-10 mobile and 8 API cases. Match `Case Summary` and `Steps` by `Case ID` to read
+[test-cases.xlsx](repository-files/test-cases/test-cases.xlsx) contains 20 cases:
+10 mobile and 10 API. It retains all 18 cases from the
+[Module 3 workbook](https://github.com/nebius-academy-templates/qa-template-week-3-agents/blob/main/test-cases.xlsx)
+and adds two API cases. Match `Case Summary` and `Steps` by `Case ID` to read
 the complete preconditions, actions and expected results. `Endpoints` is a
 column in `Case Summary`.
 
-The `Automated Test` column contains 13 expected test-source references after
-Modules 1-3. The other five cases have a status of `READY FOR AUTOMATION`,
-`BLOCKED` or `NEEDS_CLARIFICATION`, based on the Lesson 3.5 assessment.
+The additional cases use normal product requests and require no sandbox state
+toggles:
+
+| Case ID | Scenario |
+|---|---|
+| API-2009 | Reject repeated ride completion without duplicating or changing the existing order history. |
+| API-2010 | Reject an unknown ride option ID. |
+
+The `Automated Test` column retains the original 13 expected test-source
+references and five readiness statuses from the Lesson 3.5 assessment.
+The two added cases are marked `READY FOR AUTOMATION` based on the current
+product contract and available automation tools.
 `READY FOR AUTOMATION` is the workbook label for the assessment result `READY`.
 Verify test references in your own checkout, where generated class or method
 names may differ. Neither a source reference nor a readiness status proves a
