@@ -106,8 +106,8 @@ toggles:
 
 | Case ID | Scenario |
 |---|---|
-| API-2009 | Reject repeated ride completion without duplicating or changing the existing order history. |
-| API-2010 | Reject an unknown ride option ID. |
+| API-2009 | Reject an unknown ride option ID. |
+| API-2010 | Reject repeated ride completion without duplicating or changing the existing order history. |
 
 The `Automated Test` column retains the original 13 expected test-source
 references and five readiness statuses from the Lesson 3.5 assessment.
