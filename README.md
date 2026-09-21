@@ -1,7 +1,7 @@
 # QA workflow skills
 
 Install this package into your Kotlin project repository. It
-provides the complete 24-case workbook and six skills for assessing a case,
+provides the complete 20-case workbook and six skills for assessing a case,
 planning and generating its test, executing it, repairing a supported test
 defect, and checking the result against the original case.
 
@@ -94,10 +94,10 @@ The script synchronizes all six `SKILL.md` files. The optional
 
 ## Included test cases
 
-[test-cases.xlsx](repository-files/test-cases/test-cases.xlsx) contains 24 cases:
-10 mobile and 14 API. It retains all 18 cases from the
+[test-cases.xlsx](repository-files/test-cases/test-cases.xlsx) contains 20 cases:
+10 mobile and 10 API. It retains all 18 cases from the
 [Module 3 workbook](https://github.com/nebius-academy-templates/qa-template-week-3-agents/blob/main/test-cases.xlsx)
-and adds six API cases. Match `Case Summary` and `Steps` by `Case ID` to read
+and adds two API cases. Match `Case Summary` and `Steps` by `Case ID` to read
 the complete preconditions, actions and expected results. `Endpoints` is a
 column in `Case Summary`.
 
@@ -108,14 +108,10 @@ toggles:
 |---|---|
 | API-2009 | Reject repeated ride completion without duplicating or changing the existing order history. |
 | API-2010 | Reject an unknown ride option ID. |
-| API-2011 | Reject a seven-digit phone number. |
-| API-2012 | Reject malformed JSON in an OTP request. |
-| API-2013 | Reject an order-history request without authorization. |
-| API-2014 | Resolve the pickup location to Oak Avenue. |
 
 The `Automated Test` column retains the original 13 expected test-source
 references and five readiness statuses from the Lesson 3.5 assessment.
-The six added cases are marked `READY FOR AUTOMATION` based on the current
+The two added cases are marked `READY FOR AUTOMATION` based on the current
 product contract and available automation tools.
 `READY FOR AUTOMATION` is the workbook label for the assessment result `READY`.
 Verify test references in your own checkout, where generated class or method
