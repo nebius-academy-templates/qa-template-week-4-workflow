@@ -1,7 +1,7 @@
 # QA workflow skills
 
 Install this package into your Kotlin project repository. It
-provides the complete 18-case workbook and six skills for assessing a case,
+provides a test-case workbook and six skills for assessing a case,
 planning and generating its test, executing it, repairing a supported test
 defect, and checking the result against the original case.
 
@@ -91,8 +91,8 @@ The script synchronizes all six `SKILL.md` files. The optional
 
 ## Included test cases
 
-[test-cases.xlsx](repository-files/test-cases/test-cases.xlsx) contains 10 mobile
-and 8 API cases. Match `Case Summary` and `Steps` by `Case ID` to read
+[test-cases.xlsx](repository-files/test-cases/test-cases.xlsx) contains mobile
+and API cases. Match `Case Summary` and `Steps` by `Case ID` to read
 the complete preconditions, actions and expected results. `Endpoints` is a
 column in `Case Summary`.
 
